@@ -37,7 +37,7 @@ export const en: Dict = {
   },
   hero: {
     pill: "Bangladesh's NID-verified teacher network",
-    line1: "The right teacher.",
+    line1: "Best teachers.",
     line2: "Next-level results.",
     body: "Teachers verified with national and university ID, 50% off your first trial, and zero commission for teachers — trust, success and care on one platform.",
     ctaPrimary: "Find teachers",

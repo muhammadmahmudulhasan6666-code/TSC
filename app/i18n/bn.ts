@@ -38,7 +38,7 @@ export const bn = {
   },
   hero: {
     pill: "বাংলাদেশের NID-Verified Teacher Network",
-    line1: "সঠিক Teacher,",
+    line1: "Best Teacher,",
     line2: "Next-Level Result.",
     body: "NID আর University ID-তে verified teacher, প্রথম Trial-এ ৫০% ছাড়, আর teacher-দের জন্য একদম Zero Commission — Trust, Success, Care এক প্ল্যাটফর্মে।",
     ctaPrimary: "Teacher খুঁজুন",

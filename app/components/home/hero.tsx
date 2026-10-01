@@ -64,8 +64,10 @@ export function Hero() {
       </div>
 
       <div className="container-page relative text-center">
-        <div className="rise logo-halo float-b" style={d(0)}>
-          <Logo size={76} priority />
+        <div className="rise float-b" style={d(0)}>
+          <div className="logo-ring">
+            <Logo size={76} priority className="shadow-none" />
+          </div>
         </div>
 
         <div className="rise mt-7 flex justify-center" style={d(0.1)}>
