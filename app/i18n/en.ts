@@ -179,8 +179,6 @@ export const en: Dict = {
     negotiable: "Negotiable",
     viewProfile: "View profile",
     trust: "Trust",
-    newTeacher: "New teacher",
-    newTeacherHint: "The Trust Score appears after the first review.",
     years: "years' experience",
     online: "Online",
     offline: "Offline",

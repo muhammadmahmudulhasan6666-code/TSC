@@ -71,14 +71,8 @@ export function TeacherCard({ teacher: t, compact }: { teacher: T; compact?: boo
               <span className="rounded-full bg-text/6 px-2 py-0.5 text-xs font-bold text-muted">{t.tsc_id}</span>
             </div>
           </div>
-          {/* Until a first review exists the score only reflects verification, so show "new" instead of a low number. */}
-          {t.total_reviews > 0 ? (
-            <TrustRing score={t.trust_score} label={x.trust} />
-          ) : (
-            <span className="shrink-0 rounded-full bg-violet/10 px-2.5 py-1 text-xs font-bold text-violet" title={x.newTeacherHint}>
-              {x.newTeacher}
-            </span>
-          )}
+          {/* Until a first review exists the score only reflects verification, so nothing is shown. */}
+          {t.total_reviews > 0 && <TrustRing score={t.trust_score} label={x.trust} />}
         </div>
 
         {!compact && t.subjects.length > 0 && (

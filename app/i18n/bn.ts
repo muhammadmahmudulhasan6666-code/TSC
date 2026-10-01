@@ -180,8 +180,6 @@ export const bn = {
     negotiable: "আলোচনা সাপেক্ষে",
     viewProfile: "Profile দেখুন",
     trust: "Trust",
-    newTeacher: "নতুন Teacher",
-    newTeacherHint: "প্রথম review আসার পর Trust Score দেখা যাবে।",
     years: "বছরের অভিজ্ঞতা",
     online: "Online",
     offline: "Offline",

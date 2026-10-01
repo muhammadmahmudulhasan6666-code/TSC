@@ -122,19 +122,12 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
                 </span>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-1 sm:items-end">
-              {p.total_reviews > 0 ? (
-                <>
-                  <TrustRing score={p.trust_score} size={76} label={x.trustScore} />
-                  <span className="text-xs font-bold text-muted">{x.trustScore}</span>
-                </>
-              ) : (
-                <>
-                  <span className="rounded-full bg-violet/10 px-3 py-1.5 text-sm font-bold text-violet">{tt.newTeacher}</span>
-                  <span className="max-w-[12rem] text-center text-xs text-muted sm:text-right">{tt.newTeacherHint}</span>
-                </>
-              )}
-            </div>
+            {p.total_reviews > 0 && (
+              <div className="flex flex-col items-center gap-1 sm:items-end">
+                <TrustRing score={p.trust_score} size={76} label={x.trustScore} />
+                <span className="text-xs font-bold text-muted">{x.trustScore}</span>
+              </div>
+            )}
           </CardBody>
         </Card>
       </Reveal>
@@ -211,7 +204,7 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
                     {formatDate(p.created_at, locale, { year: "numeric", month: "long" })}
                   </Fact>
                 </dl>
-                <p className="mt-5 text-xs text-muted">{x.trustHint}</p>
+                {p.total_reviews > 0 && <p className="mt-5 text-xs text-muted">{x.trustHint}</p>}
               </CardBody>
             </Card>
           </Reveal>
