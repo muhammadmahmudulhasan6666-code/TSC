@@ -2,23 +2,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "./slot";
 import { cn } from "~/lib/cn";
 
-// Crimson is reserved for the single primary action on a screen; gold only for premium.
+// Crimson gradient is the one primary action per screen; gold is reserved for premium.
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold select-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-45 [&_svg]:size-[1.15em] [&_svg]:shrink-0",
+  [
+    "relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap font-bold",
+    "transition-[transform,box-shadow,background-color,border-color,color,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+    "hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]",
+    "disabled:pointer-events-none disabled:opacity-45 [&_svg]:size-[1.15em] [&_svg]:shrink-0",
+  ].join(" "),
   {
     variants: {
       variant: {
-        primary: "bg-primary text-on-primary hover:bg-primary-hover shadow-[0_1px_0_rgb(0_0_0/0.08)]",
-        secondary: "border border-border-strong bg-surface text-text hover:bg-surface-2",
-        ghost: "text-text hover:bg-surface-2",
-        brand: "bg-brand text-white hover:brightness-110",
-        premium: "border border-gold/60 bg-gold-soft text-text hover:border-gold",
-        link: "h-auto px-0 text-brand underline-offset-4 hover:underline",
+        primary: "shine bg-[image:var(--grad-primary)] text-on-primary shadow-[var(--glow-primary)] hover:brightness-110",
+        secondary: "glass text-text hover:border-border-strong",
+        brand: "bg-brand text-white shadow-[0_10px_28px_-10px_rgb(0_128_92/0.6)] hover:brightness-110",
+        ghost: "text-text hover:bg-text/5",
+        premium: "shine bg-[image:var(--grad-gold)] text-[#2a1d02] shadow-[0_10px_28px_-10px_rgb(176_132_31/0.7)] hover:brightness-105",
+        link: "h-auto px-0 text-primary underline-offset-4 hover:translate-y-0 hover:underline",
       },
       size: {
-        sm: "h-9 rounded-[10px] px-3 text-sm",
-        md: "h-11 rounded-[10px] px-5 text-base", // 44px — minimum touch target
-        lg: "h-13 rounded-[12px] px-7 text-lg",
+        sm: "h-10 rounded-full px-4 text-sm",
+        md: "h-12 rounded-full px-6 text-base", // ≥44px touch target
+        lg: "h-14 rounded-full px-8 text-lg",
         icon: "size-11 rounded-full",
       },
       block: { true: "w-full" },
