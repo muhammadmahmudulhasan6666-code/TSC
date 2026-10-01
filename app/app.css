@@ -280,3 +280,65 @@
   @keyframes tsc-rise { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } }
   @keyframes tsc-pop { from { opacity: 0; transform: translateY(24px) scale(0.94); } }
 }
+
+/* ── Hero stage ─────────────────────────────────────────────────────────────── */
+@layer components {
+  .hero-stage { position: relative; isolation: isolate; --mx: 50%; --my: 40%; }
+  /* Rotating twin beam from above the headline. */
+  .hero-beam {
+    position: absolute; z-index: -1; left: 50%; top: -30%; width: min(1400px, 220vw); aspect-ratio: 1; translate: -50% 0;
+    background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, color-mix(in srgb, var(--primary-2) 55%, transparent) 40deg, transparent 95deg, transparent 180deg, color-mix(in srgb, var(--brand-2) 45%, transparent) 230deg, transparent 290deg);
+    filter: blur(90px); opacity: 0.55; animation: tsc-beam 28s linear infinite;
+    mask-image: radial-gradient(circle at 50% 50%, #000 0 32%, transparent 62%);
+  }
+  :root[data-theme="dark"] .hero-beam { opacity: 0.75; }
+  @keyframes tsc-beam { to { rotate: 360deg; } }
+
+  /* Rings radiating from behind the headline. */
+  .hero-rings { position: absolute; z-index: -1; left: 50%; top: 46%; translate: -50% -50%; pointer-events: none; }
+  .hero-rings span {
+    position: absolute; left: 50%; top: 50%; width: 340px; height: 340px; translate: -50% -50%; border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    box-shadow: 0 0 40px -10px color-mix(in srgb, var(--primary) 30%, transparent) inset;
+    animation: tsc-ring 7.5s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; opacity: 0;
+  }
+  .hero-rings span:nth-child(2) { animation-delay: 2.5s; border-color: color-mix(in srgb, var(--brand) 22%, transparent); }
+  .hero-rings span:nth-child(3) { animation-delay: 5s; }
+  @keyframes tsc-ring { 0% { scale: 0.4; opacity: 0; } 15% { opacity: 1; } 100% { scale: 3.4; opacity: 0; } }
+
+  /* Pointer-follow glow (desktop); drifts by itself on touch. */
+  .hero-cursor { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(520px circle at var(--mx) var(--my), color-mix(in srgb, var(--primary-2) 22%, transparent), transparent 60%);
+    transition: background-position 0.2s; }
+  @media (pointer: coarse) { .hero-cursor { animation: tsc-cursor-drift 10s ease-in-out infinite alternate; } }
+  @keyframes tsc-cursor-drift { 0% { --mx: 25%; --my: 30%; } 100% { --mx: 75%; --my: 55%; } }
+
+  /* Floating glass chips around the headline. */
+  .float-a { animation: tsc-float 7s ease-in-out infinite; }
+  .float-b { animation: tsc-float 8.5s ease-in-out -2s infinite; }
+  .float-c { animation: tsc-float 9.5s ease-in-out -4s infinite; }
+  @keyframes tsc-float { 0%, 100% { translate: 0 0; rotate: -1.5deg; } 50% { translate: 0 -14px; rotate: 1.5deg; } }
+
+  /* Logo halo */
+  .logo-halo { position: relative; display: inline-grid; place-items: center; }
+  .logo-halo::before {
+    content: ""; position: absolute; inset: -10px; border-radius: 32%; z-index: -1;
+    background: conic-gradient(from 0deg, var(--primary-2), var(--gold-2), var(--brand-2), var(--primary-2));
+    filter: blur(14px); opacity: 0.65; animation: tsc-spin-plain 8s linear infinite;
+  }
+  @keyframes tsc-spin-plain { to { rotate: 360deg; } }
+
+  /* Gradient text with a slow travelling sheen. */
+  .text-shimmer {
+    background: linear-gradient(100deg, var(--primary) 0%, var(--primary-2) 25%, var(--gold-2) 42%, var(--primary-2) 58%, var(--primary) 75%, var(--brand) 100%);
+    background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: tsc-sheen 7s ease-in-out infinite;
+  }
+  @keyframes tsc-sheen { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  /* Hand-drawn underline that draws itself. */
+  .swoosh path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tsc-draw 1.4s 0.9s var(--ease-spring) forwards; }
+  @keyframes tsc-draw { to { stroke-dashoffset: 0; } }
+}
+@property --mx { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@property --my { syntax: "<percentage>"; inherits: true; initial-value: 40%; }

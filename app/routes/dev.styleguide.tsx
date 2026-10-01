@@ -10,6 +10,7 @@ import { ThemeToggle } from "~/components/site/theme";
 import { CountUp } from "~/components/fx/count-up";
 import { Reveal, Stagger } from "~/components/fx/reveal";
 import { TiltCard } from "~/components/fx/tilt-card";
+import { Hero } from "~/components/home/hero";
 import { formatConnects, formatDate, formatNumber, formatTaka } from "~/lib/format";
 
 export const meta = () => [{ title: "Design System — TSC" }, { name: "robots", content: "noindex" }];
@@ -53,49 +54,7 @@ export default function Styleguide() {
 
   return (
     <div className="pb-28">
-      {/* ── Hero showcase ───────────────────────────────────────────── */}
-      <section className="container-page pb-16 pt-12 text-center sm:pt-20">
-        <div className="rise glass mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-bold">
-          <Sparkles className="size-4 text-primary" aria-hidden />
-          {s.heroPill}
-        </div>
-
-        <div className="pop glow-frame mx-auto mt-8 max-w-3xl" style={{ "--d": "0.1s" } as React.CSSProperties}>
-          <div className="px-5 py-7 sm:px-12 sm:py-10">
-            <h1 className="text-[2.5rem] leading-[1.08] sm:text-6xl">
-              <span className="block">{s.heroLine1}</span>
-              <span className="text-gradient block pb-1">{s.heroLine2}</span>
-            </h1>
-          </div>
-        </div>
-
-        <div className="rise" style={{ "--d": "0.3s" } as React.CSSProperties}>
-          <p className="mx-auto mt-7 max-w-xl text-lg text-muted sm:text-xl">{s.heroBody}</p>
-          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-            <Button size="lg">
-              <Search aria-hidden />
-              {s.heroCtaPrimary}
-            </Button>
-            <Button size="lg" variant="secondary">
-              <UserPlus aria-hidden />
-              {s.heroCtaSecondary}
-            </Button>
-          </div>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 text-sm text-muted">
-            <span className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5">
-              <span className="pulse-dot" aria-hidden />
-              <b className="text-text">{s.liveLabel}</b>
-              <span>
-                <span className="whitespace-nowrap font-bold text-text">
-                  <CountUp value={69} locale={locale} className="tabular" />+
-                </span>{" "}
-                {s.liveText}
-              </span>
-            </span>
-            <Badge>{t.common.sample}</Badge>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* ── Marquee ─────────────────────────────────────────────────── */}
       <div className="mask-fade-x overflow-hidden border-y border-border py-4" aria-hidden>

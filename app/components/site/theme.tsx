@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocale } from "~/i18n";
@@ -50,18 +49,11 @@ export function ThemeToggle() {
       title={label}
       className="glass grid size-11 place-items-center overflow-hidden rounded-full text-text transition-transform duration-300 hover:-translate-y-0.5 active:scale-95"
     >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={theme}
-          initial={{ rotate: -90, scale: 0.4, opacity: 0 }}
-          animate={{ rotate: 0, scale: 1, opacity: 1 }}
-          exit={{ rotate: 90, scale: 0.4, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 320, damping: 20 }}
-          className="relative grid place-items-center"
-        >
-          {theme === "dark" ? <Moon className="size-5 text-gold-2" /> : <Sun className="size-5 text-primary" />}
-        </motion.span>
-      </AnimatePresence>
+      {/* Icons are driven by the html[data-theme] attribute, so the right one shows before hydration. */}
+      <span className="relative grid size-5 place-items-center">
+        <Sun className="absolute size-5 text-primary transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [[data-theme=dark]_&]:rotate-90 [[data-theme=dark]_&]:scale-0 [[data-theme=dark]_&]:opacity-0" />
+        <Moon className="absolute size-5 -rotate-90 scale-0 text-gold-2 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [[data-theme=dark]_&]:rotate-0 [[data-theme=dark]_&]:scale-100 [[data-theme=dark]_&]:opacity-100" />
+      </span>
     </button>
   );
 }

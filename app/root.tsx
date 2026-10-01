@@ -10,7 +10,8 @@ export const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://tscmmh.bd";
 export const links: Route.LinksFunction = () => [
   { rel: "preload", href: "/fonts/Kalpurush.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
   { rel: "preload", href: "/fonts/Tinos-latin-400-normal.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
-  { rel: "icon", href: "/favicon.ico", sizes: "any" },
+  { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
+  { rel: "icon", href: "/favicon-64.png", type: "image/png", sizes: "64x64" },
   { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
 ];
 
@@ -23,7 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#faf8f3" />
+        <meta name="theme-color" content="#fbf8f6" />
         <meta name="google-site-verification" content="i-PdyHjFWYgEQ_ZOYOvertS-sWzZo9hB3B76R3wcBQg" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link rel="alternate" hrefLang="bn" href={SITE_URL + localizePath(bare, "bn")} />
