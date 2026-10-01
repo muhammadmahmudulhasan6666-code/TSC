@@ -3,30 +3,27 @@
 _Last updated: 2026-10-01_
 
 ## Done
-- **Phase 0 · Data rescue (code.md §9) — complete backup on Mahmud's PC** (`C:\TSC Local\data-backup\2026-10-01\`, never committed):
-  - Full read-only dump of the old Lovable DB `pipxumfqykczzwcvfgua`: 97 tables / 9,674 rows, 172 functions, 76 triggers, 335 RLS policies, 5 cron jobs, column ACLs, storage object list.
-  - `auth.users` + `auth.identities`: **330 users, all 330 with bcrypt password hashes** → §9A Path 1 (users keep their passwords).
-  - Storage: **367 / 367 files (361 MB)** across 13 buckets, 0 failures.
-  - A second, independent export through the live super_admin session (`tables/`, `storage/`).
-- New Supabase project **`ijfjncsdkhnqpjdgjupo`** (Singapore, free) created by Mahmud; reachable via `scripts/sql.mjs`.
-- Tooling: `scripts/sql.mjs` (Management API SQL; old DB forced read-only; MMH/BoostEdly refs blocked), `scripts/rescue/*`.
-- `audit/live-schema.md` — real production table list and row counts.
+**Phase 0 — data rescue**: full read-only dump of the old DB (97 tables, 9,674 rows, functions/policies/triggers), `auth.users` with all 330 bcrypt hashes, 367/367 storage files (361 MB) — all on Mahmud's PC, never committed.
 
-## Key findings
-- User count is **330** (admin panel's 279 excluded some states) — matches Mahmud's 329 + admin.
-- MathSprint 2.0: 52 registrations, only **3 attempts started, 0 submitted** — the exam effectively did not run. 133 failed registration attempts were logged (contactable).
-- 13 tables referenced by the latest code **don't exist in production** (portfolio sections/videos/courses, sensitive-info tables, ad campaigns…) — features that were never live.
-
-## Decisions (Mahmud, 2026-10-01)
-- AI features: **none at launch** (no Lovable gateway; moderation done by admin by hand). Keep an `ai` interface stub for later.
-- Integrations kept: **Telegram admin alerts, Facebook Pixel + Conversions API, Google Search Console stats** (+ Resend email). Dropped: Algolia (Postgres search instead), Linear, Firecrawl, Notion/TSCI sync, Sentry.
-- Push to GitHub `TSC` repo approved at the end of each phase.
+**Phase 1 — foundation**
+- App: React Router 8 (SPA + pre-rendered public pages), Tailwind 4, bn at `/`, en at `/en`, typed dictionaries (missing key = build error).
+- Design system v2 (approved "100/100"): aurora + glass, motion (reveal/tilt/count-up/smooth scroll), hero with logo edge-ring, crisp logo/favicons from the 1024 px master.
+- Cloudflare Pages project `tsc` → preview https://beta.tsc-f4z.pages.dev (security headers, SPA fallback, 404).
+- Database (new project `ijfjncsdkhnqpjdgjupo`, Singapore) — migrations 0100–0400:
+  identity/roles, student & teacher profiles, PII split into `*_private` tables, portfolios, settings, notifications,
+  audit log, price list, server-priced bKash payment requests, vouchers; RLS everywhere, column-level update locks,
+  helpers in a non-exposed `private` schema. Advisors: performance clean; security only intentional RPC notices.
+- **Users imported**: 330 auth users (same UUIDs, emails, passwords), 155 students, 174 teachers, TSC IDs unchanged,
+  sequences continue at S167 / T177. `mahmudulhasan2002177@gmail.com` = super_admin. 28 legacy-Connect vouchers (৳2,100).
+- Decisions: `docs/decisions/0001-pricing-and-money.md` (halal, free student core, flat taka, contact unlock ৳100,
+  Smart Match ৳250, MathSprint companion pricing + anti-cheat).
 
 ## Next
-1. Phase 1 questions to Mahmud (AI provider, integrations keep/drop, logo variants, Kalpurush file).
-2. Repo foundation: Vite + React Router framework mode, Tailwind tokens, fonts, i18n routing, CI.
-3. Baseline schema on the new project (clean squash of the live schema + §6.4 security fixes).
+1. Auth screens: login (old password works), Google, signup with role, reset flow (§9A), first-login welcome.
+2. Import the remaining tables (bookings, unlocks, notes, MathSprint, community, notifications, messages…).
+3. Media: R2 buckets + `media` Worker; upload the rescued files.
+4. Public pages (Phase 3) with SEO: sitemap, OG/meta, JSON-LD, Search Console.
 
 ## Blocked on Mahmud
-- Cloudflare R2: enable in dashboard.
-- Resend: rotate the leaked keys, create a new one.
+- `tscmmh.bd` zone is in a **different Cloudflare account** than the API token (nameservers conrad/kay) → need a token from that account for `beta.tscmmh.bd`.
+- Cloudflare R2: enable in dashboard. · Resend: rotate leaked keys, create a new one. · bKash receiving number + type.
