@@ -185,6 +185,8 @@
   h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; text-wrap: balance; }
   html:lang(en) h1, html:lang(en) h2 { letter-spacing: -0.02em; }
   p { text-wrap: pretty; }
+  h1, h2, h3, h4, p, li, dd, dt, td, label { overflow-wrap: break-word; }
+  main { min-width: 0; }
   img, svg, video { max-width: 100%; }
   :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 8px; }
   ::selection { background: rgb(208 16 58 / 0.18); color: inherit; }

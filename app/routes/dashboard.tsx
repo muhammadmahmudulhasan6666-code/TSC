@@ -61,17 +61,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container-page grid gap-5 py-10 sm:py-14">
+    <div className="container-page grid grid-cols-1 gap-5 py-10 sm:py-14 [&>*]:min-w-0">
       <Reveal from="blur">
         <Card>
           <CardBody className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex min-w-0 items-center gap-4">
               <span className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-[20px] bg-[image:var(--grad-primary)] text-2xl font-bold text-white shadow-[var(--glow-primary)]">
                 {me.photoUrl ? <img src={me.photoUrl} alt="" className="size-full object-cover" /> : (me.fullName ?? me.email).slice(0, 1).toUpperCase()}
               </span>
               <div className="min-w-0">
                 <p className="text-sm text-muted">{d.hello}</p>
-                <h1 className="truncate text-2xl sm:text-3xl">{me.fullName ?? me.email}</h1>
+                <h1 className="break-words text-2xl [overflow-wrap:anywhere] sm:text-3xl">{me.fullName ?? me.email.split("@")[0]}</h1>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {me.roles.map((r) => (
                     <Badge key={r} tone={r === "super_admin" || r === "admin" ? "certified" : "verified"}>
@@ -82,7 +82,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <Button variant="secondary" onClick={signOut}>
+            <Button variant="secondary" onClick={signOut} className="w-full sm:w-auto">
               <LogOut aria-hidden />
               {t.auth.logout}
             </Button>
@@ -92,8 +92,8 @@ export default function Dashboard() {
 
       {me.isLegacy && (
         <Reveal from="up" delay={0.05}>
-          <p className="flex items-center gap-2 text-muted">
-            <ShieldCheck className="size-5 shrink-0 text-brand" aria-hidden />
+          <p className="flex items-start gap-2 text-muted">
+            <ShieldCheck className="mt-1 size-5 shrink-0 text-brand" aria-hidden />
             {d.welcomeBack}
           </p>
         </Reveal>
@@ -125,7 +125,7 @@ export default function Dashboard() {
                 <Sparkles className="size-5 text-violet" aria-hidden />
                 {d.adminTitle}
               </h2>
-              <dl className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                 {(
                   [
                     [stats?.users, d.adminUsers, Users],
@@ -134,10 +134,10 @@ export default function Dashboard() {
                     [stats?.pending, d.adminPendingVerify, ShieldCheck],
                   ] as const
                 ).map(([n, label, Icon]) => (
-                  <div key={label} className="rounded-2xl bg-surface/60 p-4">
+                  <div key={label} className="min-w-0 rounded-2xl bg-surface/60 p-3.5 sm:p-4">
                     <Icon className="size-5 text-muted" aria-hidden />
                     <dd className="tabular mt-2 text-3xl font-bold">{n === undefined ? "…" : <CountUp value={n} locale={locale} />}</dd>
-                    <dt className="text-sm text-muted">{label}</dt>
+                    <dt className="text-sm leading-snug text-muted">{label}</dt>
                   </div>
                 ))}
               </dl>
