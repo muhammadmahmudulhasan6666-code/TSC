@@ -34,6 +34,7 @@ async function upload(o) {
     method: "PUT",
     headers: { Authorization: `Bearer ${TOKEN}`, "content-type": o.metadata?.mimetype || "application/octet-stream" },
     body: fs.readFileSync(file),
+    signal: AbortSignal.timeout(Number(process.env.UPLOAD_TIMEOUT_MS || 120_000)), // a stalled request must not hang the whole run
   });
   done[oldUrl] = { bucket, key, status: res.ok ? "ok" : `http_${res.status}`, size: fs.statSync(file).size };
 }
@@ -41,14 +42,14 @@ async function upload(o) {
 const queue = [...objects];
 let n = 0;
 await Promise.all(
-  Array.from({ length: 6 }, async () => {
+  Array.from({ length: Number(process.env.UPLOAD_CONCURRENCY || 3) }, async () => {
     for (let o = queue.shift(); o; o = queue.shift()) {
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
           await upload(o);
           if (done[`${o.bucket_id}/${o.name}`]?.status === "ok" || attempt === 3) break;
         } catch (e) {
-          if (attempt === 3) done[`${o.bucket_id}/${o.name}`] = { status: `error ${e.message}` };
+          if (attempt === 3) done[`${o.bucket_id}/${o.name}`] = { bucket: PRIVATE.has(o.bucket_id) ? "tsc-private" : "tsc-public", status: `error ${e.message}` };
         }
       }
       if (++n % 25 === 0) {
