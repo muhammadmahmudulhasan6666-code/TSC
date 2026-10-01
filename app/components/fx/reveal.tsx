@@ -58,7 +58,8 @@ export function Stagger({ children, className, step = 0.08, from = "up", alterna
   return (
     <div className={cn(className)}>
       {Children.toArray(children).map((child, i) => (
-        <Reveal key={i} delay={i * step} from={orbitMode ? (i % 2 ? "orbitRight" : "orbitLeft") : alternate ? (i % 2 ? "right" : "left") : from}>
+        // min-w-0: grid items default to their content's min width, which lets truncated text widen the column.
+        <Reveal key={i} className="min-w-0" delay={i * step} from={orbitMode ? (i % 2 ? "orbitRight" : "orbitLeft") : alternate ? (i % 2 ? "right" : "left") : from}>
           {child}
         </Reveal>
       ))}

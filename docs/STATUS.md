@@ -18,6 +18,13 @@ _Last updated: 2026-10-01_
 - Decisions: `docs/decisions/0001-pricing-and-money.md` (halal, free student core, flat taka, contact unlock ৳100,
   Smart Match ৳250, MathSprint companion pricing + anti-cheat).
 
+## Done (Phase 2–3 start)
+- Auth: login (old passwords work), signup with role, forgot/reset (implicit flow, any device), dashboard; Super Admin verified by Mahmud.
+- All old data in: 330 users + profiles; notifications (1,749) and audit log (348) in public; 90 other tables (6,425 rows) archived in `legacy` (not API-exposed) for module migrations; 367/367 files in R2, 47 profile photos on media.tscmmh.bd.
+- Public API (SECURITY DEFINER, PII-free): `get_home_stats`, `get_teacher_filters`, `search_teachers`, `get_public_teacher`, `list_public_teacher_ids`; institution normaliser (CUET/BUET/DU…).
+- Pages: real home (live numbers, campuses, teacher cards, steps, ecosystem, teacher band), Find Teachers (search + 6 filters in the URL, load more), teacher profile pages (pre-rendered for all 50 verified teachers, Person JSON-LD).
+- SEO: per-page title/description/canonical/OG/Twitter, Organization JSON-LD, sitemap.xml (104 URLs, hreflang), robots (beta = noindex, production = indexable), clean 1200×630 OG image.
+
 ## Next
 1. Auth screens: login (old password works), Google, signup with role, reset flow (§9A), first-login welcome.
 2. Import the remaining tables (bookings, unlocks, notes, MathSprint, community, notifications, messages…).
