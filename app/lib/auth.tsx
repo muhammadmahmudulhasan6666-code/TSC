@@ -1,5 +1,7 @@
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { localeFromPath, localizePath } from "~/i18n";
 import { supabase } from "./supabase";
 
 export type Role = "student" | "teacher" | "admin" | "super_admin";
@@ -108,3 +110,18 @@ export function passwordStrength(pw: string): number {
   if (/[^a-z0-9]/i.test(pw) || (/[a-z]/.test(pw) && /[A-Z]/.test(pw))) score++;
   return Math.min(4, pw.length < 8 ? Math.min(score, 1) : score);
 }
+
+/** For app pages: once the session is known, send logged-out visitors to log in and back here afterwards. */
+export function useRequireAuth() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    if (auth.ready && !auth.me) {
+      navigate(`${localizePath("/login", localeFromPath(pathname))}?next=${encodeURIComponent(pathname + search)}`, { replace: true });
+    }
+  }, [auth.ready, auth.me, navigate, pathname, search]);
+  return auth;
+}
+
+export const isAdminRole = (me: Me | null) => !!me?.roles.some((r) => r === "admin" || r === "super_admin");

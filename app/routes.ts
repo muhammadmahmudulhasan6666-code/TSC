@@ -14,13 +14,21 @@ const publicPages: [path: string, file: string][] = [
   ["teachers", "routes/teachers.tsx"],
 ];
 
+/** Logged-in app pages: client-rendered (SPA fallback in public/_redirects), never pre-rendered. */
+const appPages: [path: string, file: string][] = [
+  ["pay/:id", "routes/pay.tsx"],
+  ["dashboard/unlocks", "routes/my-unlocks.tsx"],
+  ["dashboard/requests", "routes/teacher-requests.tsx"],
+  ["admin/payments", "routes/admin-payments.tsx"],
+];
+
 /** Pages with a URL parameter: routed in both languages, pre-rendered from live data in react-router.config.ts. */
 const dynamicPages: [path: string, file: string][] = [["teachers/:tscId", "routes/teacher-profile.tsx"]];
 
 const localized = (prefix: "" | "en") =>
   layout("routes/_site.tsx", { id: `site-${prefix || "bn"}` }, [
     prefix ? route(prefix, "routes/home.tsx", { id: "home-en" }) : index("routes/home.tsx", { id: "home-bn" }),
-    ...[...publicPages, ...dynamicPages].map(([path, file]) =>
+    ...[...publicPages, ...dynamicPages, ...appPages].map(([path, file]) =>
       route(prefix ? `${prefix}/${path}` : path, file, { id: `${prefix || "bn"}:${path}` }),
     ),
   ]);

@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { useAuth } from "~/lib/auth";
 import { cn } from "~/lib/cn";
 import { BrandLink } from "./brand";
+import { NotificationBell } from "./notifications";
 import { ThemeToggle } from "./theme";
 
 /** Segmented "বাং | EN" switch with a sliding thumb. */
@@ -77,7 +78,10 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-1.5">
           <LanguageSwitch />
-          <ThemeToggle />
+          <span className="hidden sm:contents">
+            <ThemeToggle />
+          </span>
+          <NotificationBell />
           <Button asChild size="sm" className="hidden h-11 sm:inline-flex">
             <Link to={account.to}>
               <account.Icon aria-hidden />
@@ -113,6 +117,10 @@ export function SiteHeader() {
                 </Link>
               </motion.div>
             ))}
+            <div className="mt-2 flex items-center justify-between rounded-2xl px-4 py-2 sm:hidden">
+              <span className="text-muted">{t.nav.theme}</span>
+              <ThemeToggle />
+            </div>
             <Button asChild block className="mt-2 sm:hidden">
               <Link to={account.to} onClick={() => setOpen(false)}>
                 <account.Icon aria-hidden />

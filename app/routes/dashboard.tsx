@@ -1,4 +1,5 @@
-import { BadgeCheck, Gift, LogOut, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, CreditCard, Gift, Inbox, KeyRound, LogOut, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useLocale } from "~/i18n";
@@ -9,7 +10,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardBody } from "~/components/ui/card";
 import { CountUp } from "~/components/fx/count-up";
-import { Reveal } from "~/components/fx/reveal";
+import { Reveal, Stagger } from "~/components/fx/reveal";
 
 export const meta = () => [{ title: "Dashboard — TSC" }, { name: "robots", content: "noindex" }];
 
@@ -145,6 +146,30 @@ export default function Dashboard() {
           </Card>
         </Reveal>
       )}
+
+      {/* Shortcuts by role */}
+      <Stagger step={0.06} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {[
+          me.roles.includes("student") && { to: "/dashboard/unlocks", icon: KeyRound, label: t.unlock.myTitle, tint: "rose" as const },
+          me.roles.includes("teacher") && { to: "/dashboard/requests", icon: Inbox, label: t.unlock.requestsTitle, tint: "violet" as const },
+          isAdmin && { to: "/admin/payments", icon: CreditCard, label: t.adminPay.title, tint: "gold" as const },
+        ]
+          .filter(Boolean)
+          .map((l) => {
+            const { to, icon: Icon, label, tint } = l as { to: string; icon: typeof KeyRound; label: string; tint: "rose" | "violet" | "gold" };
+            return (
+              <Card key={to} tint={tint}>
+                <Link to={href(to)} className="group flex items-center gap-3 p-4">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--chip)] text-[var(--accent)]">
+                    <Icon className="size-5" aria-hidden />
+                  </span>
+                  <span className="min-w-0 flex-1 font-bold">{label}</span>
+                  <ArrowRight className="size-4 shrink-0 text-muted transition-transform group-hover:translate-x-1" aria-hidden />
+                </Link>
+              </Card>
+            );
+          })}
+      </Stagger>
 
       <p className="text-center text-sm text-muted">{d.comingNext}</p>
     </div>

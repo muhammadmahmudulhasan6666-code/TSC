@@ -1,6 +1,6 @@
 import { ArrowLeft, BadgeCheck, CalendarDays, GraduationCap, Layers, MapPin, MonitorSmartphone, Phone, Share2, ShieldCheck, Star, Wallet, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import type { Route } from "./+types/teacher-profile";
 import { useLocale } from "~/i18n";
@@ -13,6 +13,8 @@ import { ErrorState } from "~/components/site/error-state";
 import { Magnetic } from "~/components/fx/magnetic";
 import { Reveal } from "~/components/fx/reveal";
 import { Avatar, TrustRing, rateLabel } from "~/components/teachers/teacher-card";
+import { useAuth } from "~/lib/auth";
+import { moneyErrorKey, requestContactUnlock } from "~/lib/money";
 
 export async function loader({ params }: Route.LoaderArgs) {
   return { teacher: await getPublicTeacher(params.tscId) };
@@ -64,6 +66,27 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
   const tt = t.teachers;
   const { tscId = "" } = useParams();
   const [p, setP] = useState<TeacherProfile | null>(loaderData.teacher);
+  const { me } = useAuth();
+  const navigate = useNavigate();
+  const [unlocking, setUnlocking] = useState(false);
+
+  // Unlock: logged-out → log in and come back; otherwise create/reuse the unlock and go to payment or the list.
+  async function unlock() {
+    if (!me) {
+      navigate(`${href("/login")}?next=${encodeURIComponent(href(`/teachers/${tscId}`))}`);
+      return;
+    }
+    setUnlocking(true);
+    try {
+      const r = await requestContactUnlock(tscId);
+      navigate(href(r.status === "awaiting_payment" ? `/pay/${r.payment_request_id}` : "/dashboard/unlocks"));
+    } catch (e) {
+      const k = moneyErrorKey(e as { code?: string });
+      toast.error(k && k in t.unlock ? (t.unlock[k as keyof typeof t.unlock] as string) : t.auth.genericError);
+    } finally {
+      setUnlocking(false);
+    }
+  }
 
   useEffect(() => {
     getPublicTeacher(tscId).then(setP).catch(() => {});
@@ -212,9 +235,9 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
           <Reveal from="up" delay={0.1}>
             <div className="grid gap-3">
               <Magnetic className="block">
-                <Button size="lg" block onClick={() => toast(t.common.comingSoon)}>
+                <Button size="lg" block onClick={unlock} disabled={unlocking}>
                   <Phone aria-hidden />
-                  {x.unlock}
+                  {t.unlock.cta}
                 </Button>
               </Magnetic>
               <Button asChild size="lg" variant="secondary" block>

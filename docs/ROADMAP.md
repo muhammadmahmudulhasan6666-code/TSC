@@ -18,13 +18,13 @@
 - ✅ Home page (আসল সংখ্যা), Teacher খুঁজুন (search + filter), ৫০ জন teacher-এর profile পেজ
 - ✅ SEO: title/description/OG, JSON-LD, sitemap, robots, share-ছবি (বাংলা ঠিক)
 
-## 🔄 ধাপ ১ — টাকা আসার পথ (এখন)
-- ⬜ **bKash payment পেজ**: service বাছাই → bKash নম্বর (01609291050) + ঠিক টাকা + reference code, copy বাটন, বাংলা নির্দেশনা → sender নম্বর + TrxID (format যাচাই, একই TrxID দুবার নয়) + ঐচ্ছিক screenshot
-- ⬜ Voucher প্রয়োগ (প্রথম service-এ ছাড়), দাম সবসময় server ঠিক করবে
-- ⬜ আমার payment-এর ইতিহাস + status + প্রিন্টযোগ্য receipt
-- ⬜ **নম্বর Unlock (৳১০০)**: request → payment → teacher Accept/Reject → Accept হলে দুই দিকে নম্বর খুলবে; Reject বা ৭২ ঘণ্টায় সাড়া না দিলে স্বয়ংক্রিয় ফেরত; মাসে request-এর সীমা
-- ⬜ **Admin: payment approval queue** — filter, approve/reject (কারণ সহ), approve হলেই service চালু + notification; প্রতিটা কাজ audit log-এ
-- ⬜ Notification center (bell, অপঠিত সংখ্যা, realtime) — পুরনো ১,৭৪৯টা notice সহ
+## 🔄 ধাপ ১ — টাকা আসার পথ (প্রায় শেষ)
+- ✅ **bKash payment পেজ**: service বাছাই → bKash নম্বর (01609291050) + ঠিক টাকা + reference code, copy বাটন, বাংলা নির্দেশনা → sender নম্বর + TrxID (format যাচাই, একই TrxID দুবার নয়) + ঐচ্ছিক screenshot
+- ✅ Voucher প্রয়োগ (প্রথম service-এ ছাড়), দাম সবসময় server ঠিক করবে
+- 🔄 আমার payment-এর ইতিহাস + status (Unlock-এর জন্য হয়েছে) · প্রিন্টযোগ্য receipt বাকি
+- ✅ **নম্বর Unlock (৳১০০)**: request → payment → teacher Accept/Reject → Accept হলে দুই দিকে নম্বর খুলবে; Reject বা ৭২ ঘণ্টায় সাড়া না দিলে স্বয়ংক্রিয় ফেরত; মাসে request-এর সীমা
+- ✅ **Admin: payment approval queue** — filter, approve/reject (কারণ সহ), approve হলেই service চালু + notification; প্রতিটা কাজ audit log-এ
+- ✅ Notification center (bell, অপঠিত সংখ্যা, realtime) — পুরনো ১,৭৪৯টা notice সহ
 - ⬜ Telegram-এ admin alert (নতুন payment এলে) 👤 bot token লাগবে
 
 ## ⬜ ধাপ ২ — Student / Guardian flow

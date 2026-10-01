@@ -14,7 +14,7 @@ const GOOGLE_ENABLED = import.meta.env.VITE_GOOGLE_AUTH === "on";
 export default function Login() {
   const { t, href } = useLocale();
   const a = t.auth;
-  const { me } = useAuth();
+  const { me, refresh } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const next = params.get("next");
@@ -33,8 +33,13 @@ export default function Login() {
     setBusy(true);
     setError(null);
     const { error: err } = await supabase().auth.signInWithPassword({ email: email.trim(), password });
+    if (err) {
+      setBusy(false);
+      return setError(a[authErrorKey(err)] ?? a.genericError);
+    }
+    // Load the profile now instead of waiting on the auth event, so the redirect below fires reliably.
+    await refresh();
     setBusy(false);
-    if (err) setError(a[authErrorKey(err)] ?? a.genericError);
   }
 
   async function google() {

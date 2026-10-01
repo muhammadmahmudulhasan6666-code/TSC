@@ -15,7 +15,7 @@ type Role = "student" | "teacher";
 export default function Register() {
   const { t, href } = useLocale();
   const a = t.auth;
-  const { me } = useAuth();
+  const { me, refresh } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [role, setRole] = useState<Role>(params.get("role") === "teacher" ? "teacher" : "student");
@@ -45,7 +45,8 @@ export default function Register() {
     setBusy(false);
     // Supabase returns a user with no identities when the email is already registered.
     if (!err && data.user && data.user.identities?.length === 0) return setError(a.emailTaken);
-    if (err) setError(a[authErrorKey(err)] ?? a.genericError);
+    if (err) return setError(a[authErrorKey(err)] ?? a.genericError);
+    await refresh();
   }
 
   const roles: { id: Role; label: string; hint: string; icon: typeof BookOpen }[] = [
