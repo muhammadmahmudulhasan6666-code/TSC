@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { LogIn, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 import { localizePath, stripLocale, useLocale } from "~/i18n";
 import { Button } from "~/components/ui/button";
+import { useAuth } from "~/lib/auth";
 import { cn } from "~/lib/cn";
 import { BrandLink } from "./brand";
 import { ThemeToggle } from "./theme";
@@ -39,6 +40,10 @@ export function LanguageSwitch() {
 
 export function SiteHeader() {
   const { t, href } = useLocale();
+  const { me } = useAuth();
+  const account = me
+    ? { to: href("/dashboard"), label: t.dash.myDashboard, Icon: LayoutDashboard }
+    : { to: href("/login"), label: t.nav.login, Icon: LogIn };
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
@@ -74,9 +79,9 @@ export function SiteHeader() {
           <LanguageSwitch />
           <ThemeToggle />
           <Button asChild size="sm" className="hidden h-11 sm:inline-flex">
-            <Link to={href("/login")}>
-              <LogIn aria-hidden />
-              {t.nav.login}
+            <Link to={account.to}>
+              <account.Icon aria-hidden />
+              {account.label}
             </Link>
           </Button>
           <button
@@ -109,9 +114,9 @@ export function SiteHeader() {
               </motion.div>
             ))}
             <Button asChild block className="mt-2 sm:hidden">
-              <Link to={href("/login")} onClick={() => setOpen(false)}>
-                <LogIn aria-hidden />
-                {t.nav.login}
+              <Link to={account.to} onClick={() => setOpen(false)}>
+                <account.Icon aria-hidden />
+                {account.label}
               </Link>
             </Button>
           </motion.nav>

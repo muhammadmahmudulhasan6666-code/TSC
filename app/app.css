@@ -351,3 +351,14 @@
 @property --my { syntax: "<percentage>"; inherits: true; initial-value: 40%; }
 
 @property --ring-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+/* Orbiting satellites around a centre (Magic-UI-style orbiting circles, CSS only). */
+@layer components {
+  .orbit { position: absolute; left: 50%; top: 50%; width: var(--orbit-size, 200px); height: var(--orbit-size, 200px); translate: -50% -50%; border-radius: 50%;
+    border: 1px dashed color-mix(in srgb, var(--text) 14%, transparent); animation: tsc-spin-plain var(--orbit-speed, 24s) linear infinite; pointer-events: none; }
+  .orbit.reverse { animation-direction: reverse; }
+  .orbit > .sat { position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+    transform: rotate(var(--a)) translateY(calc(var(--orbit-size, 200px) / -2)) rotate(calc(-1 * var(--a))); }
+  .orbit > .sat > * { animation: tsc-spin-plain var(--orbit-speed, 24s) linear infinite reverse; }
+  .orbit.reverse > .sat > * { animation-direction: normal; }
+}

@@ -3,6 +3,8 @@ import type { Route } from "./+types/root";
 import { getDict, localeFromPath, localizePath, stripLocale } from "~/i18n";
 import { themeInitScript } from "~/components/site/theme";
 import { ErrorState } from "~/components/site/error-state";
+import { Toaster } from "sonner";
+import { AuthProvider } from "~/lib/auth";
 import "./app.css";
 
 export const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://tscmmh.bd";
@@ -43,7 +45,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <Outlet />
+      <Toaster position="top-center" richColors closeButton toastOptions={{ className: "font-serif" }} />
+    </AuthProvider>
+  );
 }
 
 export function HydrateFallback() {

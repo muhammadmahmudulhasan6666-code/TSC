@@ -10,6 +10,7 @@ import { ThemeToggle } from "~/components/site/theme";
 import { CountUp } from "~/components/fx/count-up";
 import { Reveal, Stagger } from "~/components/fx/reveal";
 import { TiltCard } from "~/components/fx/tilt-card";
+import { ScrollText } from "~/components/fx/scroll-text";
 import { Hero } from "~/components/home/hero";
 import { formatConnects, formatDate, formatNumber, formatTaka } from "~/lib/format";
 
@@ -68,10 +69,15 @@ export default function Styleguide() {
         </div>
       </div>
 
-      {/* ── Explore: tinted tilt cards sliding in from both sides ───── */}
+      {/* ── Manifesto: words light up as you scroll ─────────────────── */}
+      <section className="container-page py-24 sm:py-36">
+        <ScrollText text={s.manifesto} className="mx-auto max-w-4xl text-3xl font-bold leading-[1.35] sm:text-5xl" />
+      </section>
+
+      {/* ── Explore: tinted tilt cards orbiting in from both sides ──── */}
       <section className="container-page py-20 sm:py-28">
         <SectionHead eyebrow={t.meta.pillars} title={s.exploreTitle} body={s.exploreBody} />
-        <Stagger alternate className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger orbit step={0.12} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {explore.map(({ icon: Icon, tint, title, body }) => (
             <TiltCard key={title} tint={tint} className="h-full">
               <a href="#" className="flex h-full flex-col p-6" onClick={(e) => e.preventDefault()}>

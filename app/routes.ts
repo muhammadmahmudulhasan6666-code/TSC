@@ -6,6 +6,11 @@ import { type RouteConfig, index, layout, route } from "@react-router/dev/routes
  */
 const publicPages: [path: string, file: string][] = [
   ["dev/styleguide", "routes/dev.styleguide.tsx"],
+  ["login", "routes/login.tsx"],
+  ["register", "routes/register.tsx"],
+  ["forgot-password", "routes/forgot-password.tsx"],
+  ["reset-password", "routes/reset-password.tsx"],
+  ["dashboard", "routes/dashboard.tsx"],
 ];
 
 const localized = (prefix: "" | "en") =>

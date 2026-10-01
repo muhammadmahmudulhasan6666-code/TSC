@@ -1,9 +1,10 @@
-import { BadgeCheck, Headset, Percent, Search, ShieldCheck, UserPlus, Wallet, Zap } from "lucide-react";
+import { BadgeCheck, BookOpen, GraduationCap, Headset, Percent, Search, ShieldCheck, Star, UserPlus, Wallet, Zap } from "lucide-react";
 import { useRef } from "react";
 import { Link } from "react-router";
 import { useLocale } from "~/i18n";
 import { Button } from "~/components/ui/button";
 import { Logo } from "~/components/site/brand";
+import { Magnetic } from "~/components/fx/magnetic";
 import { cn } from "~/lib/cn";
 
 const d = (s: number) => ({ "--d": `${s}s` }) as React.CSSProperties;
@@ -64,9 +65,29 @@ export function Hero() {
       </div>
 
       <div className="container-page relative text-center">
-        <div className="rise float-b" style={d(0)}>
-          <div className="logo-ring">
-            <Logo size={76} priority className="shadow-none" />
+        {/* Logo with its edge ring, circled by orbiting glass satellites. */}
+        <div className="rise relative mx-auto grid size-[150px] place-items-center [--orbit-size:150px] sm:size-[190px] sm:[--orbit-size:190px]" style={d(0)}>
+          <div aria-hidden className="orbit" style={{ "--orbit-speed": "26s" } as React.CSSProperties}>
+            {[
+              [BadgeCheck, "0deg", "text-brand"],
+              [BookOpen, "90deg", "text-primary"],
+              [GraduationCap, "180deg", "text-violet"],
+              [Star, "270deg", "text-gold"],
+            ].map(([Icon, a, color], i) => {
+              const I = Icon as typeof Star;
+              return (
+                <span key={i} className="sat" style={{ "--a": a } as React.CSSProperties}>
+                  <span className="glass glass-strong grid size-9 place-items-center rounded-full shadow-[var(--shadow-card)] sm:size-10">
+                    <I className={cn("relative size-4 sm:size-[18px]", color as string)} />
+                  </span>
+                </span>
+              );
+            })}
+          </div>
+          <div className="float-b">
+            <div className="logo-ring">
+              <Logo size={76} priority className="shadow-none" />
+            </div>
           </div>
         </div>
 
@@ -108,18 +129,22 @@ export function Hero() {
         </p>
 
         <div className="rise mx-auto mt-9 flex max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center" style={d(0.7)}>
-          <Button asChild size="lg">
-            <Link to={href("/teachers")}>
-              <Search aria-hidden />
-              {h.ctaPrimary}
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="secondary">
-            <Link to={href("/register")}>
-              <UserPlus aria-hidden />
-              {h.ctaSecondary}
-            </Link>
-          </Button>
+          <Magnetic className="block sm:inline-flex">
+            <Button asChild size="lg" block>
+              <Link to={href("/teachers")}>
+                <Search aria-hidden />
+                {h.ctaPrimary}
+              </Link>
+            </Button>
+          </Magnetic>
+          <Magnetic className="block sm:inline-flex">
+            <Button asChild size="lg" variant="secondary" block>
+              <Link to={href("/register?role=teacher")}>
+                <UserPlus aria-hidden />
+                {h.ctaSecondary}
+              </Link>
+            </Button>
+          </Magnetic>
         </div>
 
         <ul className="rise mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-muted sm:text-base" style={d(0.85)}>
