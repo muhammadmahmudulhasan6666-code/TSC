@@ -10,3 +10,5 @@ data-backup/
 .supabase/
 test-results/
 playwright-report/
+.react-router/
+build/

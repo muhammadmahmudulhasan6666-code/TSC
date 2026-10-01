@@ -17,6 +17,11 @@ _Last updated: 2026-10-01_
 - MathSprint 2.0: 52 registrations, only **3 attempts started, 0 submitted** — the exam effectively did not run. 133 failed registration attempts were logged (contactable).
 - 13 tables referenced by the latest code **don't exist in production** (portfolio sections/videos/courses, sensitive-info tables, ad campaigns…) — features that were never live.
 
+## Decisions (Mahmud, 2026-10-01)
+- AI features: **none at launch** (no Lovable gateway; moderation done by admin by hand). Keep an `ai` interface stub for later.
+- Integrations kept: **Telegram admin alerts, Facebook Pixel + Conversions API, Google Search Console stats** (+ Resend email). Dropped: Algolia (Postgres search instead), Linear, Firecrawl, Notion/TSCI sync, Sentry.
+- Push to GitHub `TSC` repo approved at the end of each phase.
+
 ## Next
 1. Phase 1 questions to Mahmud (AI provider, integrations keep/drop, logo variants, Kalpurush file).
 2. Repo foundation: Vite + React Router framework mode, Tailwind tokens, fonts, i18n routing, CI.

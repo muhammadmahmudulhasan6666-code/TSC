@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* ── Fonts (design system §5.2) ─────────────────────────────────────────────
+   One family "TSC Serif": Latin → Times New Roman if installed, else Tinos (same metrics);
+   Bangla → Kalpurush. unicode-range lets mixed bn/en text pick the right face automatically. */
+@font-face { font-family: "TSC Serif"; font-style: normal; font-weight: 400; font-display: swap;
+  src: local("Times New Roman"), local("TimesNewRomanPSMT"), url("/fonts/Tinos-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "TSC Serif"; font-style: normal; font-weight: 700; font-display: swap;
+  src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"), url("/fonts/Tinos-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "TSC Serif"; font-style: italic; font-weight: 400; font-display: swap;
+  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT"), url("/fonts/Tinos-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "TSC Serif"; font-style: italic; font-weight: 700; font-display: swap;
+  src: local("Times New Roman Bold Italic"), url("/fonts/Tinos-latin-700-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "TSC Serif"; font-style: normal; font-weight: 400; font-display: swap;
+  src: local("Times New Roman"), url("/fonts/Tinos-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "TSC Serif"; font-style: normal; font-weight: 700; font-display: swap;
+  src: local("Times New Roman Bold"), url("/fonts/Tinos-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02AF, U+1E00-1E9F, U+20A0-20AB, U+20AD-20C0, U+A720-A7FF; }
+/* Kalpurush ships one weight and draws large; 94% sets its headline (matra) level with Times caps in mixed text. */
+@font-face { font-family: "TSC Serif"; font-weight: 100 900; font-display: swap; size-adjust: 94%;
+  src: local("Kalpurush"), url("/fonts/Kalpurush.woff2") format("woff2");
+  unicode-range: U+0964-0965, U+0980-09FF, U+200C-200D, U+25CC; }
+
+/* ── Colour tokens (§5.1). Light (ivory) is the default theme. ─────────────── */
+:root {
+  color-scheme: light;
+  --bg: #faf8f3;
+  --surface: #ffffff;
+  --surface-2: #f3f0e8;
+  --border: rgb(15 26 20 / 0.1);
+  --border-strong: rgb(15 26 20 / 0.18);
+  --text: #0f1a14;
+  --text-muted: #56635b;
+  --primary: #c8102e;
+  --primary-hover: #a50d26;
+  --on-primary: #ffffff;
+  --brand: #006a4e;
+  --brand-soft: #e3efe9;
+  --gold: #a8822e;
+  --gold-soft: #f5ecd6;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --ring: #006a4e;
+  --shadow: 0 1px 2px rgb(15 26 20 / 0.06), 0 8px 24px -12px rgb(15 26 20 / 0.12);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #07110b;
+  --surface: #0c1a12;
+  --surface-2: #122419;
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --text: #f2f1ec;
+  --text-muted: #9aa69f;
+  --primary: #e11d48;
+  --primary-hover: #be123c;
+  --on-primary: #ffffff;
+  --brand: #34b886;
+  --brand-soft: #10291d;
+  --gold: #c9a24a;
+  --gold-soft: #2a2312;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --ring: #34b886;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.6);
+}
+
+@theme inline {
+  --font-serif: "TSC Serif", "Times New Roman", Tinos, "Noto Serif Bengali", serif;
+  --font-sans: var(--font-serif);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+  --radius-card: 14px;
+  --radius-input: 10px;
+  --shadow-card: var(--shadow);
+  /* Type scale (§5.2) */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.75rem;
+  --text-5xl: 3.75rem;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  :lang(bn) body, body:lang(bn) { line-height: 1.75; }
+  h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; text-wrap: balance; }
+  :lang(en) h1, :lang(en) h2 { letter-spacing: -0.015em; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: var(--brand-soft); color: var(--text); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+@utility tabular { font-variant-numeric: tabular-nums; }
+@utility container-page { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 1rem; @media (width >= 48rem) { padding-inline: 2rem; } }
