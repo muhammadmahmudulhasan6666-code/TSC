@@ -22,7 +22,7 @@
 | | MyNotes sales | Seller 70% · TSC 30% | (was 60/40) |
 
 ## Legacy Connects
-All existing balances were welcome gifts (no paid Connects were ever sold). Each user gets a **"Welcome Back" voucher worth ৳10 per Connect**, valid 6 months, usable on any paid service. Admin T1's test balance (5,005) is excluded.
+All existing balances were welcome gifts (no paid Connects were ever sold). Each user gets a **"Welcome Back" voucher worth ৳10 per Connect**, usable as a discount on their **first** paid service only. Admin T1's test balance (5,005) is excluded.
 
 ## MathSprint 3.0
 Registration 1 Mar – 10 Apr 2027, exam 17 Apr 2027 10:00 (Asia/Dhaka). All dates live in the `ms_editions` row, editable from admin.

@@ -8,7 +8,7 @@ _Last updated: 2026-10-01_
 **Phase 1 — foundation**
 - App: React Router 8 (SPA + pre-rendered public pages), Tailwind 4, bn at `/`, en at `/en`, typed dictionaries (missing key = build error).
 - Design system v2 (approved "100/100"): aurora + glass, motion (reveal/tilt/count-up/smooth scroll), hero with logo edge-ring, crisp logo/favicons from the 1024 px master.
-- Cloudflare Pages project `tsc` → preview https://beta.tsc-f4z.pages.dev (security headers, SPA fallback, 404).
+- Cloudflare (account of Mahmudulhasan2002177@gmail.com, same as the tscmmh.bd zone): Pages project `tscmmh` → **https://beta.tscmmh.bd**; R2 buckets `tsc-public` (→ media.tscmmh.bd) and `tsc-private`.
 - Database (new project `ijfjncsdkhnqpjdgjupo`, Singapore) — migrations 0100–0400:
   identity/roles, student & teacher profiles, PII split into `*_private` tables, portfolios, settings, notifications,
   audit log, price list, server-priced bKash payment requests, vouchers; RLS everywhere, column-level update locks,
@@ -24,6 +24,10 @@ _Last updated: 2026-10-01_
 3. Media: R2 buckets + `media` Worker; upload the rescued files.
 4. Public pages (Phase 3) with SEO: sitemap, OG/meta, JSON-LD, Search Console.
 
-## Blocked on Mahmud
-- `tscmmh.bd` zone is in a **different Cloudflare account** than the API token (nameservers conrad/kay) → need a token from that account for `beta.tscmmh.bd`.
-- Cloudflare R2: enable in dashboard. · Resend: rotate leaked keys, create a new one. · bKash receiving number + type.
+## Decisions since
+- Email: Supabase built-in email for now (as on MMH), Resend later if volume needs it.
+- bKash receiver 01609291050 (personal) — in `platform_settings.bkash_receiver`.
+- Legacy-Connects vouchers = discount on the user's **first** paid service only.
+
+## Open
+- Old leaked Resend keys in Drive (`Docs_And_Scripts/Integrate UddoktaPay payment Gateway.txt`) — revoke in Resend even if Resend isn't used now.
