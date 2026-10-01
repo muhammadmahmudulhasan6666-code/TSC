@@ -3,7 +3,7 @@
 import { localeFromPath } from "~/i18n";
 
 export const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://tscmmh.bd";
-const DEFAULT_IMAGE = `${SITE_URL}/brand/og-default.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/brand/og-default-v2.jpg`;
 
 type Copy = { title: string; description: string };
 

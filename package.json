@@ -10,7 +10,8 @@
     "test": "vitest run",
     "i18n:check": "node scripts/check-i18n.mjs",
     "fonts": "node scripts/build-fonts.mjs",
-    "postbuild": "node scripts/postbuild.mjs"
+    "postbuild": "node scripts/postbuild.mjs",
+    "og": "node scripts/og/render.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

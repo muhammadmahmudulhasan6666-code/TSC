@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<!-- Source of public/brand/og-default-v2.jpg — rendered by scripts/og/render.mjs (npm run og) with headless Edge
+     so Bangla conjuncts shape correctly (PIL can't). 1200×630 Open Graph image. -->
+<style>
+  @font-face { font-family: "TSC Serif"; src: local("Times New Roman"); unicode-range: U+0000-097F, U+2000-206F; }
+  @font-face { font-family: "TSC Serif"; src: url("../../public/fonts/Kalpurush.woff2") format("woff2"); unicode-range: U+0980-09FF, U+200C-200D; size-adjust: 94%; }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: "TSC Serif", serif; color: #f5f3f0;
+    background:
+      radial-gradient(ellipse 60% 80% at 8% 10%, rgba(170, 14, 48, .85), transparent 65%),
+      radial-gradient(ellipse 55% 70% at 100% 100%, rgba(12, 110, 72, .75), transparent 65%),
+      #070c09;
+    display: flex; align-items: center; gap: 64px; padding: 0 90px;
+  }
+  .logo { width: 360px; height: 360px; border-radius: 80px; overflow: hidden; flex-shrink: 0;
+          box-shadow: 0 30px 80px -20px rgba(0,0,0,.7), 0 0 0 2px rgba(255,255,255,.06); }
+  .logo img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scale(1.18); }
+  h1 { font-size: 112px; line-height: 1; font-weight: 700; letter-spacing: -1px; }
+  .pillars { margin-top: 20px; font-size: 42px; color: #ff6b85; }
+  .line { margin-top: 14px; font-size: 40px; color: #e3e0dc; }
+  .bn { margin-top: 14px; font-size: 44px; color: #6ff0c0; line-height: 1.35; }
+  .pill { display: inline-block; margin-top: 30px; padding: 10px 26px; border-radius: 999px; background: #d0103a; font-size: 28px; font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="logo"><img src="../../../assets/logos/tsc-logo-master-1024.jpg" alt=""></div>
+  <div>
+    <h1>TSC</h1>
+    <p class="pillars">Trust · Success · Care</p>
+    <p class="line">Verified teachers. Zero commission.</p>
+    <p class="bn">বিশ্বাস · সাফল্য · যত্ন</p>
+    <span class="pill">tscmmh.bd</span>
+  </div>
+</body>
+</html>
