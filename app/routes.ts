@@ -14,6 +14,7 @@ const publicPages: [path: string, file: string][] = [
   ["teachers", "routes/teachers.tsx"],
   ["tuition-posts", "routes/tuition-posts.tsx"],
   ["smart-match", "routes/smart-match.tsx"],
+  ["compare", "routes/compare.tsx"],
 ];
 
 /** Logged-in app pages: client-rendered (SPA fallback in public/_redirects), never pre-rendered. */
@@ -28,6 +29,11 @@ const appPages: [path: string, file: string][] = [
   ["dashboard/matches", "routes/my-matches.tsx"],
   ["admin/matches", "routes/admin-matches.tsx"],
   ["admin/posts", "routes/admin-posts.tsx"],
+  ["admin/quality", "routes/admin-quality.tsx"],
+  ["trial/:tscId", "routes/trial-new.tsx"],
+  ["review/:tscId", "routes/review-new.tsx"],
+  ["dashboard/trials", "routes/my-trials.tsx"],
+  ["dashboard/saved", "routes/saved-teachers.tsx"],
 ];
 
 /** Pages with a URL parameter: routed in both languages, pre-rendered from live data in react-router.config.ts. */

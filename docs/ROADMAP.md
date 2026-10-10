@@ -32,10 +32,10 @@
 - ✅ **Contact detector**: বাংলা/English সংখ্যা, "শূন্য এক নয়", ভাঙা নম্বর, email, @handle, link ধরবে — client + server দুই জায়গায়; flagged হলে admin review (Tuition Post, Smart Match-এ চালু; বাকি free-text জায়গায় পরে)
 - ✅ Teacher-দের Hand Raise + guardian-এর কাছে তালিকা; এলাকার teacher-দের email/notification alert
 - ✅ **Smart Match (৳২৫০)**: পুরনো form-এর সব criteria (লক্ষ্য, trial topic, budget, এলাকা, learning style, teacher-এর গুণ, দিন/সময়) → admin একজন dedicated teacher দেবে, না মিললে আরেকজন (সর্বোচ্চ ২); কিছু দিতে না পারলে ফেরত · landing পেজ (SEO), ৬ ধাপের form, আমার match, teacher view, admin queue + "মানানসই teacher" suggestion
-- ⬜ Trial booking lifecycle: request → accept → class-এর পর দুই পক্ষকে "ক্লাস হয়েছে?" → সম্পন্ন/no-show/অভিযোগ; ৭২ ঘণ্টায় auto-complete → review চাওয়া
-- ⬜ Review ও rating (admin approval), তারপর Trust Score দেখা যাবে
-- ⬜ "Tuition match হয়েছে?" outcome প্রশ্ন
-- ⬜ Saved teacher, compare (৩ জন পর্যন্ত)
+- ✅ Trial booking lifecycle (free, শুধু যুক্ত হওয়া জোড়ার মধ্যে): request → accept → class-এর পর দুই পক্ষকে "ক্লাস হয়েছে?" → সম্পন্ন/no-show/অভিযোগ; ৭২ ঘণ্টায় auto-complete → review চাওয়া
+- ✅ Review ও rating (admin approval, শুধু যুক্ত হওয়া student/guardian দিতে পারবেন), তারপর Trust Score দেখা যাবে; profile-এ review + Google rating (JSON-LD)
+- ✅ "Tuition match হয়েছে?" outcome প্রশ্ন (দুই পক্ষ, অমিল হলে admin) — পুরনো site-এর outcome, saved আর unlock-ও আনা হয়েছে
+- ✅ Saved teacher, compare (৩ জন পর্যন্ত)
 - ⬜ Student dashboard: একটাই "পরের কাজ" card + shortcut; phone-এ নিচে tab bar
 - ⬜ Profile editor, settings, help/FAQ; প্রথম login-এ "Welcome back" sheet (ছবি/তথ্য re-upload দরকার হলে)
 
@@ -55,7 +55,7 @@
 - ⬜ Verification queue: document zoom viewer, approve/reject (কারণ), TSC Certified/Featured
 - ⬜ Profile change approval
 - 🔄 Payment, Unlock, Smart Match, Booking, Dispute পরিচালনা (Payment ✅, Smart Match ✅)
-- 🔄 Tuition Post ও content moderation (Tuition Post review/note clean/take down ✅) (review, ছবি, video, community)
+- 🔄 Tuition Post ও content moderation (Tuition Post review/note clean/take down ✅, Review approval ✅, Trial/Outcome অমিল ✅) (review, ছবি, video, community)
 - ⬜ Service ও দাম editor, platform settings (bKash, announcement bar, maintenance mode)
 - ⬜ Broadcast: message/email composer (audience filter, বাংলা/English, preview, schedule, duplicate আটকানো, delivery log)
 - ⬜ Gift/referral/voucher/campaign engine

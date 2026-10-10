@@ -1,4 +1,4 @@
-import { Clock, CreditCard, Loader2, MessageCircle, Phone, RefreshCcw, Sparkles, ThumbsUp } from "lucide-react";
+import { CalendarCheck, Clock, CreditCard, Loader2, MessageCircle, Phone, RefreshCcw, Sparkles, ThumbsUp } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -115,6 +115,12 @@ function GuardianMatch({ m, reload }: { m: MyMatch; reload: () => void }) {
               </div>
             </div>
             {m.teacher_phone && <PhoneRow phone={m.teacher_phone} />}
+            <Button asChild size="sm" variant="secondary" className="justify-self-start">
+              <Link to={href(`/trial/${m.teacher.tsc_id}`)}>
+                <CalendarCheck aria-hidden />
+                {t.trial.cta}
+              </Link>
+            </Button>
           </div>
         )}
 

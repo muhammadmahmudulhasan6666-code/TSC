@@ -17,5 +17,9 @@
 /tuition-posts/new    /__spa-fallback  200
 /en/tuition-posts/new /__spa-fallback  200
 /smart-match/new      /__spa-fallback  200
+/trial/*              /__spa-fallback  200
+/en/trial/*           /__spa-fallback  200
+/review/*             /__spa-fallback  200
+/en/review/*          /__spa-fallback  200
 /en/smart-match/new   /__spa-fallback  200
 # Anything else that isn't a pre-rendered file gets 404.html (= SPA shell, renders the 404 page).

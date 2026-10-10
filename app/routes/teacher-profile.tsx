@@ -1,4 +1,4 @@
-import { ArrowLeft, BadgeCheck, CalendarDays, GraduationCap, Layers, MapPin, MonitorSmartphone, Phone, Share2, ShieldCheck, Star, Wallet, Zap } from "lucide-react";
+import { ArrowLeft, BadgeCheck, CalendarCheck, CalendarDays, GraduationCap, Layers, MapPin, MonitorSmartphone, Phone, Share2, ShieldCheck, Star, Wallet, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
@@ -15,10 +15,25 @@ import { Reveal } from "~/components/fx/reveal";
 import { Avatar, TrustRing, rateLabel } from "~/components/teachers/teacher-card";
 import { useAuth } from "~/lib/auth";
 import { moneyErrorKey, requestContactUnlock } from "~/lib/money";
+import { getTeacherReviews, type PublicReview } from "~/lib/trials";
+import { SaveButton } from "~/components/teachers/save-button";
+import { cn } from "~/lib/cn";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  return { teacher: await getPublicTeacher(params.tscId) };
+  const [teacher, reviews] = await Promise.all([getPublicTeacher(params.tscId), getTeacherReviews(params.tscId).catch(() => [])]);
+  return { teacher, reviews };
 }
+
+// Teachers verified after the last build have no pre-rendered data file: fetch live in the browser instead.
+export async function clientLoader({ params, serverLoader }: Route.ClientLoaderArgs) {
+  try {
+    return await serverLoader();
+  } catch {
+    const [teacher, reviews] = await Promise.all([getPublicTeacher(params.tscId), getTeacherReviews(params.tscId).catch(() => [])]);
+    return { teacher, reviews };
+  }
+}
+clientLoader.hydrate = true as const;
 
 export const meta: Route.MetaFunction = ({ loaderData, location }) => {
   const p = loaderData?.teacher;
@@ -29,8 +44,8 @@ export const meta: Route.MetaFunction = ({ loaderData, location }) => {
   return pageMeta({
     path: location.pathname,
     image: p.photo_url ?? undefined,
-    bn: { title: `${name} — Verified Teacher (${where}) | TSC`, description: `${name}, ${where}। ${subjects} পড়ান${p.district ? ` — ${p.district}` : ""}। NID ও University ID-তে যাচাই করা TSC teacher (${p.tsc_id})।` },
-    en: { title: `${name} — Verified teacher (${where}) | TSC`, description: `${name}, ${where}. Teaches ${subjects}${p.district ? ` in ${p.district}` : ""}. NID- and university-ID-verified TSC teacher (${p.tsc_id}).` },
+    bn: { title: `${name} — Verified Teacher${where ? ` (${where})` : ""} | TSC`, description: `${name}${where ? `, ${where}` : ""}। ${subjects} পড়ান${p.district ? ` — ${p.district}` : ""}। NID ও University ID-তে যাচাই করা TSC teacher (${p.tsc_id})।` },
+    en: { title: `${name} — Verified teacher${where ? ` (${where})` : ""} | TSC`, description: `${name}${where ? `, ${where}` : ""}. Teaches ${subjects}${p.district ? ` in ${p.district}` : ""}. NID- and university-ID-verified TSC teacher (${p.tsc_id}).` },
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -41,6 +56,7 @@ export const meta: Route.MetaFunction = ({ loaderData, location }) => {
       url: `${SITE_URL}/teachers/${p.tsc_id}`,
       alumniOf: p.university_name?.trim() || undefined,
       knowsAbout: p.subjects,
+      aggregateRating: p.total_reviews > 0 ? { "@type": "AggregateRating", ratingValue: Number(p.average_rating), reviewCount: p.total_reviews, bestRating: 5 } : undefined,
       address: p.district ? { "@type": "PostalAddress", addressLocality: p.thana ?? undefined, addressRegion: p.district, addressCountry: "BD" } : undefined,
     },
   });
@@ -69,6 +85,7 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
   const { me } = useAuth();
   const navigate = useNavigate();
   const [unlocking, setUnlocking] = useState(false);
+  const [reviews, setReviews] = useState<PublicReview[]>(loaderData.reviews ?? []);
 
   // Unlock: logged-out → log in and come back; otherwise create/reuse the unlock and go to payment or the list.
   async function unlock() {
@@ -90,6 +107,7 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
 
   useEffect(() => {
     getPublicTeacher(tscId).then(setP).catch(() => {});
+    getTeacherReviews(tscId).then(setReviews).catch(() => {});
   }, [tscId]);
 
   if (!p) return <ErrorState code="404" title={x.notFoundTitle} body={x.notFoundBody} action={x.back} homeHref={href("/teachers")} />;
@@ -193,6 +211,46 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
               </Card>
             </Reveal>
           )}
+          <Reveal from="orbitLeft" delay={0.12}>
+            <Card>
+              <CardBody>
+                <h2 className="flex items-center gap-2 text-xl">
+                  {t.review.sectionTitle}
+                  {p.total_reviews > 0 && (
+                    <span className="inline-flex items-center gap-1 text-base text-muted">
+                      <Star className="size-4 fill-gold text-gold" aria-hidden />
+                      {formatNumber(Number(p.average_rating), locale)} · {formatNumber(p.total_reviews, locale)}
+                    </span>
+                  )}
+                </h2>
+                {reviews.length === 0 ? (
+                  <p className="mt-3 text-muted">{t.review.none}</p>
+                ) : (
+                  <ul className="mt-4 grid gap-4">
+                    {reviews.map((r) => (
+                      <li key={r.id} className="rounded-2xl bg-surface/70 p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="flex items-center gap-0.5" aria-label={`${r.rating}/5`}>
+                            {[1, 2, 3, 4, 5].map((n) => (
+                              <Star key={n} className={cn("size-4", n <= r.rating ? "fill-gold text-gold" : "text-border-strong")} aria-hidden />
+                            ))}
+                          </span>
+                          {r.after_trial && <span className="rounded-full bg-brand-soft px-2 py-0.5 text-xs font-bold text-brand">{t.review.afterTrial}</span>}
+                        </div>
+                        {r.tags.length > 0 && (
+                          <p className="mt-2 text-sm">{r.tags.map((c) => t.review.tags.find((g) => g.code === c)?.[locale] ?? c).join(" · ")}</p>
+                        )}
+                        {r.comment && <p className="mt-2 [overflow-wrap:anywhere]">“{r.comment}”</p>}
+                        <p className="mt-2 text-xs text-muted">
+                          {[r.reviewer_name, r.reviewer_class].filter(Boolean).join(" · ")} · {formatDate(r.created_at, locale, { year: "numeric", month: "short" })}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardBody>
+            </Card>
+          </Reveal>
         </div>
 
         <div className="grid content-start gap-5 [&>*]:min-w-0">
@@ -240,16 +298,27 @@ export default function TeacherProfilePage({ loaderData }: Route.ComponentProps)
                   {t.unlock.cta}
                 </Button>
               </Magnetic>
+              {!(me?.roles.includes("teacher") && !me.roles.includes("student")) && (
+              <Button asChild size="lg" variant="secondary" block>
+                <Link to={me ? href(`/trial/${p.tsc_id}`) : `${href("/login")}?next=${encodeURIComponent(href(`/trial/${p.tsc_id}`))}`}>
+                  <CalendarCheck aria-hidden />
+                  {t.trial.cta}
+                </Link>
+              </Button>
+              )}
               <Button asChild size="lg" variant="secondary" block>
                 <Link to={href("/smart-match")}>
                   <Zap aria-hidden />
                   {x.smartMatch}
                 </Link>
               </Button>
-              <Button variant="ghost" block onClick={share}>
-                <Share2 aria-hidden />
-                {x.share}
-              </Button>
+              <div className="grid grid-cols-2 gap-2">
+                <SaveButton tscId={p.tsc_id} />
+                <Button variant="ghost" onClick={share}>
+                  <Share2 aria-hidden />
+                  {x.share}
+                </Button>
+              </div>
             </div>
           </Reveal>
         </div>

@@ -28,7 +28,7 @@ export const INSTITUTIONS = ["CUET", "BUET", "DU", "CU", "KUET", "RUET", "SUST",
 type Item = { code: string; bn: string; en: string; hint?: { bn: string; en: string } };
 export function useOptions() {
   const { locale } = useLocale();
-  return (items: Item[]) => items.map((i) => ({ code: i.code, label: i[locale], hint: i.hint?.[locale] }));
+  return (items: readonly Item[]) => items.map((i) => ({ code: i.code, label: i[locale], hint: i.hint?.[locale] }));
 }
 
 /** Per-step validation for the four requirement steps (0 student, 1 subjects, 2 where/when, 3 budget). */

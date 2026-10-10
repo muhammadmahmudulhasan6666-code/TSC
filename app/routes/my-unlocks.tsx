@@ -1,4 +1,4 @@
-import { Clock, CreditCard, Loader2, MessageCircle, Phone, Search } from "lucide-react";
+import { CalendarCheck, Clock, CreditCard, Loader2, MessageCircle, Phone, Search, Star } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useLocale } from "~/i18n";
@@ -106,6 +106,23 @@ export default function MyUnlocks() {
                         </a>
                       </Button>
                     </div>
+                  </div>
+                )}
+
+                {u.status === "accepted" && u.person.kind === "teacher" && (
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Button asChild size="sm">
+                      <Link to={href(`/trial/${u.person.tsc_id}`)}>
+                        <CalendarCheck aria-hidden />
+                        {t.trial.cta}
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="ghost">
+                      <Link to={href(`/review/${u.person.tsc_id}`)}>
+                        <Star aria-hidden />
+                        {t.trial.writeReview}
+                      </Link>
+                    </Button>
                   </div>
                 )}
 
