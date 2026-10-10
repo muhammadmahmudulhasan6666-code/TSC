@@ -1,6 +1,9 @@
 // Imports users from the old DB dump into the NEW TSC project, keeping UUIDs, emails,
 // bcrypt password hashes, TSC IDs and roles (code.md §9.5, §9A Path 1).
 // Usage: node scripts/rescue/import-core.mjs [--dry]   (reads C:\TSC Local\data-backup\<date>\db)
+// Delta: DUMP_DIR=…/2026-10-10/db node scripts/rescue/import-core.mjs --delta [--since 2026-10-01T00:00Z]
+//   adds users created on the old site since the first import and refreshes rows changed there since --since.
+//   Re-runnable (used again at cutover). Never deletes anything in the new DB.
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -9,6 +12,10 @@ import { execFileSync } from "node:child_process";
 const REF = "ijfjncsdkhnqpjdgjupo";
 const DUMP = process.env.DUMP_DIR || "C:/TSC Local/data-backup/2026-10-01/db";
 const dry = process.argv.includes("--dry");
+const delta = process.argv.includes("--delta");
+const sinceArg = process.argv.indexOf("--since");
+const SINCE = sinceArg > 0 ? process.argv[sinceArg + 1] : "2026-10-01T00:00:00Z";
+const changed = (r) => !!r && (new Date(r.updated_at ?? r.created_at ?? 0) > new Date(SINCE) || new Date(r.created_at ?? 0) > new Date(SINCE));
 const load = (f) => JSON.parse(fs.readFileSync(path.join(DUMP, f), "utf8"));
 
 // ── Normalisers ──────────────────────────────────────────────────────────────────────────
@@ -161,8 +168,48 @@ select json_build_object(
   'super_admins', (select count(*) from public.user_roles where role = 'super_admin')) as result;
 commit;`;
 
+// ── Delta mode ───────────────────────────────────────────────────────────────────────────
+const upsert = (table, rows, conflict, cols = Object.keys(rows[0] || {}), skipUpdate = []) => {
+  if (!rows.length) return "";
+  const upd = cols.filter((c) => !conflict.split(",").map((x) => x.trim()).includes(c) && !skipUpdate.includes(c));
+  return `insert into ${table} (${cols.map((c) => `"${c}"`).join(",")}) select ${cols.map((c) => `"${c}"`).join(",")} from jsonb_populate_recordset(null::${table}, ${json(rows)})
+  on conflict (${conflict}) do ${upd.length ? `update set ${upd.map((c) => `"${c}" = excluded."${c}"`).join(", ")}` : "nothing"};`;
+};
+function deltaSql() {
+  const touched = new Set(users.filter(changed).map((u) => u.id));
+  for (const r of [...up, ...sp, ...tp]) if (changed(r)) touched.add(r.user_id);
+  const only = (rows, key = "user_id") => rows.filter((r) => touched.has(r[key]));
+  const authUpdatable = authUserCols.filter((c) => !["id", "instance_id", "created_at"].includes(c));
+  // Photos: keep the R2 URL the new DB already points at; map-media re-points changed ones afterwards.
+  const keepNew = ["profile_photo_url", "average_rating", "total_reviews", "total_students_taught", "booking_completion_rate", "services_completed"];
+  return `
+begin;
+set local tsc.importing = 'on';
+${upsert("auth.users", only(users, "id"), "id", authUserCols, ["instance_id"])}
+${identities.filter((i) => touched.has(i.user_id)).length ? `insert into auth.identities (${identityCols.map((c) => `"${c}"`).join(",")}) select ${identityCols.map((c) => `"${c}"`).join(",")} from jsonb_populate_recordset(null::auth.identities, ${json(identities.filter((i) => touched.has(i.user_id)))}) on conflict do nothing;` : ""}
+${upsert("public.user_profiles", only(userProfiles), "user_id")}
+${roles.filter((r) => touched.has(r.user_id)).length ? `insert into public.user_roles (user_id, role, created_at) select user_id, role, created_at from jsonb_populate_recordset(null::public.user_roles, ${json(roles.filter((r) => touched.has(r.user_id)).map((r) => pick(r, ["user_id", "role", "created_at"])))}) on conflict (user_id, role) do nothing;` : ""}
+${upsert("public.student_profiles", only(studentProfiles), "user_id", undefined, ["id", "tsc_id", ...keepNew])}
+${upsert("public.student_private", only(studentPrivate), "user_id")}
+${upsert("public.teacher_profiles", only(teacherProfiles), "user_id", undefined, ["id", "tsc_id", ...keepNew])}
+${upsert("public.teacher_private", only(teacherPrivate), "user_id")}
+${upsert("public.teacher_portfolios", only(teacherPortfolios), "user_id")}
+${vouchers.length ? `insert into public.vouchers (user_id, amount_bdt, reason, expires_at) select v.user_id, v.amount_bdt, v.reason, v.expires_at from jsonb_populate_recordset(null::public.vouchers, ${json(vouchers)}) v where not exists (select 1 from public.vouchers x where x.user_id = v.user_id and x.reason = 'legacy_connects');` : ""}
+-- New photos (not yet on R2) keep the old URL until map-media runs.
+update public.student_profiles p set profile_photo_url = x.profile_photo_url from jsonb_populate_recordset(null::public.student_profiles, ${json(only(studentProfiles).map((r) => pick(r, ["user_id", "profile_photo_url"])))}) x
+ where p.user_id = x.user_id and x.profile_photo_url is not null and (p.profile_photo_url is null or (p.profile_photo_key is null and p.profile_photo_url <> x.profile_photo_url));
+update public.teacher_profiles p set profile_photo_url = x.profile_photo_url from jsonb_populate_recordset(null::public.teacher_profiles, ${json(only(teacherProfiles).map((r) => pick(r, ["user_id", "profile_photo_url"])))}) x
+ where p.user_id = x.user_id and x.profile_photo_url is not null and (p.profile_photo_url is null or (p.profile_photo_key is null and p.profile_photo_url <> x.profile_photo_url));
+select setval('public.student_tsc_id_seq', greatest(${maxNum(sp)}, (select coalesce(max(substring(tsc_id from 2)::int), 0) from public.student_profiles where tsc_id ~ '^S[0-9]+$')));
+select setval('public.teacher_tsc_id_seq', greatest(${maxNum(tp)}, (select coalesce(max(substring(tsc_id from 2)::int), 0) from public.teacher_profiles where tsc_id ~ '^T[0-9]+$')));
+select json_build_object('touched_users', ${touched.size}, 'auth_users', (select count(*) from auth.users), 'students', (select count(*) from public.student_profiles),
+  'teachers', (select count(*) from public.teacher_profiles), 'vouchers', (select count(*) from public.vouchers)) as result;
+commit;`;
+}
+const finalSql = delta ? deltaSql() : sql;
+
 const tmp = path.join(os.tmpdir(), "tsc-import-core.sql");
-fs.writeFileSync(tmp, sql);
+fs.writeFileSync(tmp, finalSql);
 console.log(`rows: users ${users.length}, identities ${identities.length}, students ${studentProfiles.length}, teachers ${teacherProfiles.length}, portfolios ${teacherPortfolios.length}, vouchers ${vouchers.length}; sql ${(sql.length / 1024).toFixed(0)} KB`);
 const unmapped = sp.filter((r) => r.current_class && !normaliseClass(r.current_class)).map((r) => r.current_class);
 console.log("class values left unmapped:", unmapped);

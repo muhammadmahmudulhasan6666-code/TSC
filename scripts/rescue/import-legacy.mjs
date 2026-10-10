@@ -10,7 +10,9 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 
 const REF = "ijfjncsdkhnqpjdgjupo";
-const DUMP = "C:/TSC Local/data-backup/2026-10-01/db";
+const DUMP = process.env.DUMP_DIR || "C:/TSC Local/data-backup/2026-10-01/db";
+// Re-runnable: with --refresh, rows that already exist are updated from the newer dump (nothing is ever deleted).
+const refresh = process.argv.includes("--refresh");
 const load = (f) => JSON.parse(fs.readFileSync(path.join(DUMP, f), "utf8"));
 
 const ALREADY = new Set(["user_profiles", "user_roles", "student_profiles", "teacher_profiles", "user_connects"]);
@@ -62,8 +64,18 @@ const run = (sql) => {
     fs.rmSync(tmp, { force: true });
   }
 };
-const insert = (target, rows, cols) =>
-  `insert into ${target} (${cols.map((c) => `"${c}"`).join(",")}) select ${cols.map((c) => `"${c}"`).join(",")} from jsonb_populate_recordset(null::${target}, $json$${JSON.stringify(rows)}$json$::jsonb) on conflict do nothing;`;
+const pkCols = (t) => {
+  const k = constraints.find((c) => (c.tbl === t || c.tbl === `public.${t}`) && /^PRIMARY KEY/.test(c.def));
+  return k ? k.def.replace(/^PRIMARY KEY \((.*)\)$/, "$1").split(",").map((x) => x.trim().replace(/"/g, "")) : null;
+};
+const insert = (target, rows, cols, pk) => {
+  const upd = pk ? cols.filter((c) => !pk.includes(c)) : [];
+  const onConflict =
+    refresh && pk && upd.length
+      ? `on conflict (${pk.map((c) => `"${c}"`).join(",")}) do update set ${upd.map((c) => `"${c}" = excluded."${c}"`).join(", ")}`
+      : "on conflict do nothing";
+  return `insert into ${target} (${cols.map((c) => `"${c}"`).join(",")}) select ${cols.map((c) => `"${c}"`).join(",")} from jsonb_populate_recordset(null::${target}, $json$${JSON.stringify(rows)}$json$::jsonb) ${onConflict};`;
+};
 
 const report = {};
 for (const t of [...TO_PUBLIC, ...tables]) {
@@ -81,7 +93,8 @@ for (const t of [...TO_PUBLIC, ...tables]) {
       if (t === "admin_audit_log") o.action_details ??= {};
       return o;
     });
-    run(`begin;\n${insert(target, chunk, cols)}\ncommit;`);
+    // notifications/audit already live in public tables (users may have read them there): only add new rows.
+    run(`begin;\n${insert(target, chunk, cols, TO_PUBLIC.has(t) ? null : pkCols(t))}\ncommit;`);
   }
   report[t] = rows.length;
 }

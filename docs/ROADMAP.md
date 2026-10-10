@@ -1,10 +1,22 @@
 # TSC — সম্পূর্ণ Project To-do List
 
 > শেষ আপডেট: ২০২৬-১০-১০ · ✅ = শেষ · 🔄 = চলছে · ⬜ = বাকি · 👤 = Mahmud-এর কাজ
-> ক্রম (Mahmud-এর সাথে ঠিক করা): টাকার পথ → Student/Guardian flow → Teacher portal → Admin panel → MathSprint 3.0 ও বাকি module → Public পেজ → Platform → Launch।
-> প্রতিটা ধাপের শেষে: phone (360px) + desktop, light + dark-এ যাচাই → beta.tscmmh.bd-এ deploy → GitHub push।
+> **২০২৬-১০-১০ নির্দেশ:** দ্রুত কিন্তু নির্ভুল; প্রতিটা অংশ functional; UI/UX 100/100; mobile responsive; পুরনো DB-র কিছুই বাদ যাবে না; শেষে domain cutover।
+> কাজের ক্রম (launch-এর জন্য যা সবচেয়ে জরুরি আগে): A → B → C → D → E → F → G → H
+
+## 🧭 Launch পর্যন্ত Master List (A–H)
+- **A. সাধারণ** — ✅ Floating WhatsApp "Admin-এর সাথে কথা বলুন" (সব page, admin নম্বর বদলাতে পারবেন) · ✅ Footer · ✅ পুরনো site-এর নতুন user/data delta sync (৩৩৬ user, নতুন MathSprint registration, payment, notification) — cutover-এর দিন আবার চালানো হবে
+- **B. Student/Guardian শেষ অংশ** — ⬜ Dashboard "পরের কাজ" card + phone tab bar · ⬜ Profile editor + settings (password, ছবি) · ⬜ Payment history + প্রিন্টযোগ্য receipt · ⬜ "Welcome back" sheet
+- **C. Teacher portal** — ⬜ Profile editor (sensitive পরিবর্তন admin approval) · ⬜ ছবি upload + Verification document upload (R2, private) · ⬜ Weekly availability · ⬜ Teacher dashboard + performance · ⬜ Profile Boost (৳১০০/৭ দিন, ৳৩০০/৩০ দিন) · ⬜ Teaching-style ছবি ও video intro · ⬜ Premium Portfolio + `/p/:slug`
+- **D. Admin panel** — ⬜ KPI dashboard · ⬜ User management (খোঁজা, বিস্তারিত, suspend, role, reset link) · ⬜ Verification queue (document viewer) · ⬜ Profile change approval · ⬜ দাম ও settings editor · ⬜ Broadcast notification · ⬜ Voucher/gift · ⬜ Audit log viewer + CSV export · ⬜ Admin↔user message ও notice board
+- **E. Module** — ⬜ MathSprint (৩.০ registration + exam engine + leaderboard + certificate; ১.০/২.০-এর ফলাফল ও badge) · ⬜ MyNotes marketplace (কেনা, watermark download, seller earning/payout) · ⬜ Free Materials · ⬜ Tutorials ও Teaching Styles · ⬜ আলাপ-সালাপ community · ⬜ Ambassador/referral · ⬜ 1-click support + জ্ঞান পিপাসা · ⬜ Success stories
+- **F. Public পেজ** — ⬜ কীভাবে কাজ করে, Pricing, For Students/Teachers/Guardians · ⬜ About, Contact form, User Guide/FAQ · ⬜ Terms, Privacy, Refund 👤 approve · ⬜ Students তালিকা, `/r/:code` referral link
+- **G. Platform** — ⬜ PWA · ⬜ Turnstile · ⬜ Media upload worker · ⬜ Cloudflare Web Analytics · ⬜ Speed/Accessibility পাস · ⬜ Playwright + CI · ⬜ Supabase advisor পরিষ্কার
+- **H. Launch** — ⬜ শেষ delta sync · ⬜ Migration report · ⬜ UAT 👤 · ⬜ Cutover: tscmmh.bd + www → নতুন site (Cloudflare-এ আমি করব), Supabase auth URL, robots খোলা, sitemap জমা 👤 Search Console
 
 ---
+
+## বিস্তারিত (আগের ধাপ-ভিত্তিক তালিকা)
 
 ## ✅ ধাপ ০ — ভিত্তি (শেষ)
 - ✅ পুরনো site-এর সব data উদ্ধার: ৯৭টা table, ৩৩০ জন user (password সহ), ৩৬৭টা file

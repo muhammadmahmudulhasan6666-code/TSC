@@ -1,0 +1,16 @@
+# Cloudflare Pages project "tscmmh": static build + Functions in ./functions (upload / private file API).
+name = "tscmmh"
+pages_build_output_dir = "build/client"
+compatibility_date = "2026-09-01"
+
+[vars]
+SUPABASE_URL = "https://ijfjncsdkhnqpjdgjupo.supabase.co"
+SUPABASE_KEY = "sb_publishable_TUIzr6wsu8QgUUhSZ16uSw_ICDx7ltA"
+
+[[r2_buckets]]
+binding = "PUBLIC_BUCKET"
+bucket_name = "tsc-public"
+
+[[r2_buckets]]
+binding = "PRIVATE_BUCKET"
+bucket_name = "tsc-private"
