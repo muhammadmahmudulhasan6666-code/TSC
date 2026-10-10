@@ -99,3 +99,29 @@ export const createTuitionPost = (p: NewPost) => call<{ id: string; code: string
 export const raiseHand = (postId: string) => call<number>("raise_hand", { _post: postId });
 export const myTuitionPosts = () => call<MyPost[]>("my_tuition_posts");
 export const closeTuitionPost = (postId: string, filled: boolean) => call<void>("close_tuition_post", { _post: postId, _filled: filled });
+
+export interface AdminPost {
+  id: string;
+  code: string;
+  status: PostStatus;
+  curriculum: string;
+  level: string;
+  subjects: string[];
+  mode: string;
+  district: string | null;
+  thana: string | null;
+  budget_min: number | null;
+  budget_max: number | null;
+  note: string | null;
+  moderation_reason: string | null;
+  hand_raise_count: number;
+  created_at: string;
+  expires_at: string;
+  email: string;
+  author: { tsc_id?: string; full_name?: string | null };
+}
+
+export const adminListPosts = (status: string) => call<AdminPost[] | null>("admin_list_posts", { _status: status });
+export const adminModeratePost = (id: string, approve: boolean, reason?: string) => call<void>("admin_moderate_post", { _post: id, _approve: approve, _reason: reason ?? null });
+export const adminSetPostNote = (id: string, note: string) => call<void>("admin_set_post_note", { _post: id, _note: note });
+export const adminRemovePost = (id: string, reason: string) => call<void>("admin_remove_post", { _post: id, _reason: reason });

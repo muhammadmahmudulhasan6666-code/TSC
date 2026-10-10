@@ -1,6 +1,6 @@
 # TSC — সম্পূর্ণ Project To-do List
 
-> শেষ আপডেট: ২০২৬-১০-০১ · ✅ = শেষ · 🔄 = চলছে · ⬜ = বাকি · 👤 = Mahmud-এর কাজ
+> শেষ আপডেট: ২০২৬-১০-১০ · ✅ = শেষ · 🔄 = চলছে · ⬜ = বাকি · 👤 = Mahmud-এর কাজ
 > ক্রম (Mahmud-এর সাথে ঠিক করা): টাকার পথ → Student/Guardian flow → Teacher portal → Admin panel → MathSprint 3.0 ও বাকি module → Public পেজ → Platform → Launch।
 > প্রতিটা ধাপের শেষে: phone (360px) + desktop, light + dark-এ যাচাই → beta.tscmmh.bd-এ deploy → GitHub push।
 
@@ -22,16 +22,16 @@
 - ✅ **bKash payment পেজ**: service বাছাই → bKash নম্বর (01609291050) + ঠিক টাকা + reference code, copy বাটন, বাংলা নির্দেশনা → sender নম্বর + TrxID (format যাচাই, একই TrxID দুবার নয়) + ঐচ্ছিক screenshot
 - ✅ Voucher প্রয়োগ (প্রথম service-এ ছাড়), দাম সবসময় server ঠিক করবে
 - 🔄 আমার payment-এর ইতিহাস + status (Unlock-এর জন্য হয়েছে) · প্রিন্টযোগ্য receipt বাকি
-- ✅ **নম্বর Unlock (৳১০০)**: request → payment → teacher Accept/Reject → Accept হলে দুই দিকে নম্বর খুলবে; Reject বা ৭২ ঘণ্টায় সাড়া না দিলে স্বয়ংক্রিয় ফেরত; মাসে request-এর সীমা
+- ✅ **নম্বর Unlock (৳১০০, যে চায় সে দেয়, দুই দিক থেকেই)**: request → payment → teacher Accept/Reject → Accept হলে দুই দিকে নম্বর খুলবে; Reject বা ৭২ ঘণ্টায় সাড়া না দিলে স্বয়ংক্রিয় ফেরত; মাসে request-এর সীমা
 - ✅ **Admin: payment approval queue** — filter, approve/reject (কারণ সহ), approve হলেই service চালু + notification; প্রতিটা কাজ audit log-এ
 - ✅ Notification center (bell, অপঠিত সংখ্যা, realtime) — পুরনো ১,৭৪৯টা notice সহ
 - ⬜ Telegram-এ admin alert (নতুন payment এলে) 👤 bot token লাগবে
 
-## ⬜ ধাপ ২ — Student / Guardian flow
-- ⬜ **Tuition Post** (free): পুরো option-ভিত্তিক form — curriculum (বাংলা/English version, English medium Edexcel/Cambridge, মাদ্রাসা), class (Play–HSC 2nd year, O/A Level), subject, mode, এলাকা, দিন/সময়, budget, teacher-এর পছন্দ (gender, university, অভিজ্ঞতা)
-- ⬜ **Contact detector**: বাংলা/English সংখ্যা, "শূন্য এক নয়", ভাঙা নম্বর, email, @handle, link ধরবে — client + server দুই জায়গায়; flagged হলে admin review
-- ⬜ Teacher-দের Hand Raise + guardian-এর কাছে তালিকা; এলাকার teacher-দের email/notification alert
-- ⬜ **Smart Match (৳২৫০)**: পুরনো form-এর সব criteria (লক্ষ্য, trial topic, budget, এলাকা, learning style, teacher-এর গুণ, দিন/সময়) → admin একজন dedicated teacher দেবে, না মিললে আরেকজন (সর্বোচ্চ ২); কিছু দিতে না পারলে ফেরত
+## 🔄 ধাপ ২ — Student / Guardian flow
+- ✅ **Tuition Post** (free): পুরো option-ভিত্তিক form — curriculum (বাংলা/English version, English medium Edexcel/Cambridge, মাদ্রাসা), class (Play–HSC 2nd year, O/A Level), subject, mode, এলাকা, দিন/সময়, budget, teacher-এর পছন্দ (gender, university, অভিজ্ঞতা)
+- ✅ **Contact detector**: বাংলা/English সংখ্যা, "শূন্য এক নয়", ভাঙা নম্বর, email, @handle, link ধরবে — client + server দুই জায়গায়; flagged হলে admin review (Tuition Post, Smart Match-এ চালু; বাকি free-text জায়গায় পরে)
+- ✅ Teacher-দের Hand Raise + guardian-এর কাছে তালিকা; এলাকার teacher-দের email/notification alert
+- ✅ **Smart Match (৳২৫০)**: পুরনো form-এর সব criteria (লক্ষ্য, trial topic, budget, এলাকা, learning style, teacher-এর গুণ, দিন/সময়) → admin একজন dedicated teacher দেবে, না মিললে আরেকজন (সর্বোচ্চ ২); কিছু দিতে না পারলে ফেরত · landing পেজ (SEO), ৬ ধাপের form, আমার match, teacher view, admin queue + "মানানসই teacher" suggestion
 - ⬜ Trial booking lifecycle: request → accept → class-এর পর দুই পক্ষকে "ক্লাস হয়েছে?" → সম্পন্ন/no-show/অভিযোগ; ৭২ ঘণ্টায় auto-complete → review চাওয়া
 - ⬜ Review ও rating (admin approval), তারপর Trust Score দেখা যাবে
 - ⬜ "Tuition match হয়েছে?" outcome প্রশ্ন
@@ -54,8 +54,8 @@
 - ⬜ User management: খোঁজা, বিস্তারিত, suspend (কারণ + মেয়াদ, auto-unsuspend), delete, role, নোট, "Send reset link"
 - ⬜ Verification queue: document zoom viewer, approve/reject (কারণ), TSC Certified/Featured
 - ⬜ Profile change approval
-- ⬜ Payment, Unlock, Smart Match, Booking, Dispute পরিচালনা
-- ⬜ Tuition Post ও content moderation (review, ছবি, video, community)
+- 🔄 Payment, Unlock, Smart Match, Booking, Dispute পরিচালনা (Payment ✅, Smart Match ✅)
+- 🔄 Tuition Post ও content moderation (Tuition Post review/note clean/take down ✅) (review, ছবি, video, community)
 - ⬜ Service ও দাম editor, platform settings (bKash, announcement bar, maintenance mode)
 - ⬜ Broadcast: message/email composer (audience filter, বাংলা/English, preview, schedule, duplicate আটকানো, delivery log)
 - ⬜ Gift/referral/voucher/campaign engine
@@ -75,7 +75,7 @@
 - ⬜ কীভাবে কাজ করে, Pricing (halal নীতি সহ), For Students / Teachers / Guardians
 - ⬜ About, Contact (form + bot সুরক্ষা), User Guide/FAQ
 - ⬜ Terms, Privacy, Refund policy 👤 লেখা approve
-- ⬜ Tuition Board (public তালিকা, contact ছাড়া)
+- ✅ Tuition Board (public তালিকা, contact ছাড়া)
 
 ## ⬜ ধাপ ৭ — Platform ও মান
 - ⬜ WhatsApp help বাটন, PWA (install করা যাবে)

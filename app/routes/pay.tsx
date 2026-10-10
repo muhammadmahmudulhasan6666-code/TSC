@@ -101,7 +101,7 @@ export default function Pay() {
         <h1 className="text-3xl sm:text-4xl">{x.title}</h1>
         <p className="mt-2 flex items-start gap-2 text-muted">
           <ShieldCheck className="mt-1 size-5 shrink-0 text-brand" aria-hidden />
-          {x.secure}
+          {req.service_code === "contact_unlock" ? x.secure : req.service_code === "smart_match" ? x.secureMatch : x.secureGeneric}
         </p>
       </Reveal>
 
@@ -140,7 +140,7 @@ export default function Pay() {
               <h2 className="text-2xl">{done[1]}</h2>
               {req.admin_note && <p className="text-muted">{req.admin_note}</p>}
               <Button asChild variant="secondary">
-                <Link to={href(req.service_code === "contact_unlock" ? "/dashboard/unlocks" : "/dashboard")}>{t.dash.myDashboard}</Link>
+                <Link to={href(req.service_code === "contact_unlock" ? "/dashboard/unlocks" : req.service_code === "smart_match" ? "/dashboard/matches" : "/dashboard")}>{t.dash.myDashboard}</Link>
               </Button>
             </CardBody>
           </Card>

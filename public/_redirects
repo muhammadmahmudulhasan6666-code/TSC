@@ -16,4 +16,6 @@
 /en/dashboard/* /__spa-fallback  200
 /tuition-posts/new    /__spa-fallback  200
 /en/tuition-posts/new /__spa-fallback  200
+/smart-match/new      /__spa-fallback  200
+/en/smart-match/new   /__spa-fallback  200
 # Anything else that isn't a pre-rendered file gets 404.html (= SPA shell, renders the 404 page).

@@ -118,6 +118,36 @@ export const TIME_SLOTS: (L & { code: string })[] = [
   { code: "night", bn: "রাত (৯–১১)", en: "Night (9–11)" },
 ];
 
+/** Smart Match: what the family wants out of tuition. */
+export const GOALS: (L & { code: string })[] = [
+  { code: "exam_prep", bn: "পরীক্ষার প্রস্তুতি", en: "Exam preparation" },
+  { code: "weak_basics", bn: "Basic দুর্বল, শক্ত করা", en: "Fix weak basics" },
+  { code: "top_result", bn: "A+ / Top result", en: "Top grades" },
+  { code: "admission", bn: "Admission প্রস্তুতি", en: "Admission prep" },
+  { code: "homework", bn: "নিয়মিত পড়া ও homework", en: "Regular study & homework" },
+  { code: "english_fluency", bn: "English fluency", en: "English fluency" },
+  { code: "olympiad", bn: "Olympiad / Competition", en: "Olympiad / competitions" },
+];
+
+export const LEARNING_STYLES: (L & { code: string })[] = [
+  { code: "visual", bn: "ছবি / diagram দেখে", en: "Visual (diagrams)" },
+  { code: "practical", bn: "হাতে-কলমে, বেশি practice", en: "Hands-on practice" },
+  { code: "reading_writing", bn: "পড়ে ও লিখে", en: "Reading & writing" },
+  { code: "auditory", bn: "শুনে ও আলোচনা করে", en: "Listening & discussion" },
+  { code: "theoretical", bn: "ধারণা গভীরে বুঝে", en: "Deep concepts" },
+];
+
+export const TEACHER_QUALITIES: (L & { code: string })[] = [
+  { code: "patient", bn: "ধৈর্যশীল", en: "Patient" },
+  { code: "friendly", bn: "বন্ধুসুলভ", en: "Friendly" },
+  { code: "strict", bn: "কড়া ও নিয়মিত", en: "Strict & disciplined" },
+  { code: "experienced", bn: "অভিজ্ঞ", en: "Experienced" },
+  { code: "punctual", bn: "সময়ানুবর্তী", en: "Punctual" },
+  { code: "expert", bn: "Subject expert", en: "Subject expert" },
+  { code: "communicator", bn: "সুন্দর বোঝাতে পারেন", en: "Great explainer" },
+  { code: "encouraging", bn: "উৎসাহ দেন", en: "Encouraging" },
+];
+
 export const BUDGETS = [2000, 3000, 4000, 5000, 6000, 8000, 10000, 12000, 15000, 20000, 25000, 30000];
 
 export const label = (items: (L & { code: string })[], code: string, locale: "bn" | "en") => items.find((i) => i.code === code)?.[locale] ?? code;

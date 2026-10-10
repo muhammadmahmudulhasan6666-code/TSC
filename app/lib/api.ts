@@ -90,3 +90,18 @@ export const searchTeachers = (q: TeacherQuery = {}) =>
     _limit: q.limit ?? 24,
     _offset: q.offset ?? 0,
   });
+
+export interface ServicePrice {
+  code: string;
+  name_bn: string;
+  name_en: string;
+  price_bdt: number;
+}
+
+/** Active service prices (admin-editable in the DB) — pre-rendered into pages, so a price change needs a rebuild or live refresh. */
+export async function getPrices(): Promise<Record<string, ServicePrice>> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/service_prices?select=code,name_bn,name_en,price_bdt&is_active=eq.true`, { headers: { apikey: SUPABASE_KEY } });
+  if (!res.ok) throw new Error(`service_prices: ${res.status}`);
+  const rows = (await res.json()) as ServicePrice[];
+  return Object.fromEntries(rows.map((r) => [r.code, r]));
+}
