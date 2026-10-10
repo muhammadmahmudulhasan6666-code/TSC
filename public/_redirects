@@ -1,3 +1,8 @@
+# Old URLs from the Lovable site → new pages (permanent).
+/teacher-needed        /tuition-posts      301
+/en/teacher-needed     /en/tuition-posts   301
+/student/teacher-needed /tuition-posts     301
+
 # Dashboards and account pages are client-rendered: serve the SPA shell (status 200).
 /student/*      /__spa-fallback  200
 /teacher/*      /__spa-fallback  200
@@ -9,4 +14,6 @@
 /en/pay/*       /__spa-fallback  200
 /dashboard/*    /__spa-fallback  200
 /en/dashboard/* /__spa-fallback  200
+/tuition-posts/new    /__spa-fallback  200
+/en/tuition-posts/new /__spa-fallback  200
 # Anything else that isn't a pre-rendered file gets 404.html (= SPA shell, renders the 404 page).

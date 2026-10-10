@@ -52,7 +52,7 @@ export function SiteHeader() {
 
   const links: [string, string][] = [
     ["/teachers", t.nav.findTeachers],
-    ["/teacher-needed", t.nav.teacherNeeded],
+    ["/tuition-posts", t.nav.teacherNeeded],
     ["/how-it-works", t.nav.howItWorks],
     ["/pricing", t.nav.pricing],
   ];

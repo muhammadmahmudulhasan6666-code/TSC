@@ -75,14 +75,16 @@ export default function MyUnlocks() {
             <Card key={u.id} tint={u.status === "accepted" ? "mint" : undefined}>
               <CardBody className="grid gap-4">
                 <div className="flex items-start gap-4">
-                  <Link to={href(`/teachers/${u.tsc_id}`)} className="shrink-0">
-                    <Avatar name={u.full_name} url={u.photo_url} size={56} />
-                  </Link>
+                  <Avatar name={u.person.full_name ?? null} url={u.person.photo_url ?? null} size={56} />
                   <div className="min-w-0 flex-1">
-                    <Link to={href(`/teachers/${u.tsc_id}`)} className="block truncate text-lg font-bold hover:underline">
-                      {u.full_name?.trim() || u.tsc_id}
-                    </Link>
-                    <p className="truncate text-sm text-muted">{[u.university_name?.trim(), u.department].filter(Boolean).join(" · ")}</p>
+                    {u.person.kind === "teacher" ? (
+                      <Link to={href(`/teachers/${u.person.tsc_id}`)} className="block truncate text-lg font-bold hover:underline">
+                        {u.person.full_name?.trim() || u.person.tsc_id}
+                      </Link>
+                    ) : (
+                      <p className="truncate text-lg font-bold">{u.person.full_name?.trim() || u.person.tsc_id}</p>
+                    )}
+                    <p className="truncate text-sm text-muted">{[u.person.tsc_id, u.person.line].filter(Boolean).join(" · ")}</p>
                     <span className={cn("mt-2 inline-block rounded-full px-2.5 py-1 text-xs font-bold", statusTone[u.status])}>{x.status[u.status]}</span>
                   </div>
                 </div>

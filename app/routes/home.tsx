@@ -54,7 +54,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const explore = [
     { icon: Search, tint: "rose", title: c.findTitle, body: c.findBody, to: "/teachers" },
     { icon: Zap, tint: "violet", title: c.matchTitle, body: c.matchBody, to: "/smart-match" },
-    { icon: Megaphone, tint: "mint", title: c.postTitle, body: c.postBody, to: "/teacher-needed" },
+    { icon: Megaphone, tint: "mint", title: c.postTitle, body: c.postBody, to: "/tuition-posts" },
     { icon: Calculator, tint: "gold", title: c.mathTitle, body: c.mathBody, to: "/mathsprint" },
     { icon: BookOpen, tint: "violet", title: c.notesTitle, body: c.notesBody, to: "/mynotes" },
     { icon: FileText, tint: "mint", title: c.freeTitle, body: c.freeBody, to: "/free-materials" },

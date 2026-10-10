@@ -24,6 +24,19 @@ export interface PaymentRequest {
   bkash: { number: string | null; type: string | null } | null;
 }
 
+/** Public-safe card of the other person in an unlock (teacher or student). */
+export interface PersonCard {
+  kind?: "teacher" | "student";
+  tsc_id?: string;
+  full_name?: string | null;
+  photo_url?: string | null;
+  line?: string | null;
+  district?: string | null;
+  thana?: string | null;
+  subjects?: string[] | null;
+}
+
+/** An unlock I asked for (outgoing). Phone appears once the other side accepts. */
 export interface MyUnlock {
   id: string;
   status: UnlockStatus;
@@ -32,28 +45,18 @@ export interface MyUnlock {
   payment_request_id: string | null;
   payment_status: PaymentStatus | null;
   amount_bdt: number | null;
-  tsc_id: string;
-  full_name: string | null;
-  photo_url: string | null;
-  university_name: string | null;
-  department: string | null;
+  person: PersonCard;
   phone: string | null;
 }
 
+/** Someone asked for my number (incoming). */
 export interface IncomingRequest {
   id: string;
   status: UnlockStatus;
   created_at: string;
   expires_at: string | null;
-  tsc_id: string | null;
-  full_name: string | null;
-  current_class: string | null;
-  curriculum: string | null;
-  district: string | null;
-  thana: string | null;
-  subjects: string[] | null;
+  person: PersonCard;
   phone: string | null;
-  guardian_name: string | null;
 }
 
 export interface AdminPayment extends Omit<PaymentRequest, "bkash"> {
@@ -94,7 +97,7 @@ export const getPaymentRequest = (id: string) => call<PaymentRequest | null>("ge
 export const submitPaymentProof = (id: string, sender: string, trx: string) => call<void>("submit_payment_proof", { _request: id, _sender: sender, _trx: trx });
 export const renewUnlockPayment = (unlockId: string) => call<string>("renew_unlock_payment", { _unlock: unlockId });
 export const myUnlocks = () => call<MyUnlock[]>("my_unlocks");
-export const teacherUnlockRequests = () => call<IncomingRequest[]>("teacher_unlock_requests");
+export const incomingUnlockRequests = () => call<IncomingRequest[]>("incoming_unlock_requests");
 export const respondContactUnlock = (id: string, accept: boolean) => call<void>("respond_contact_unlock", { _unlock: id, _accept: accept });
 export const adminListPayments = (status: string) => call<AdminPayment[]>("admin_list_payments", { _status: status });
 export const adminPaymentCounts = () => call<{ pending_with_proof: number; pending_no_proof: number; refund_due: number }>("admin_payment_counts");

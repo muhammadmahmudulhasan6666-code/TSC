@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useLocale } from "~/i18n";
 import { useRequireAuth } from "~/lib/auth";
 import { formatDate } from "~/lib/format";
-import { respondContactUnlock, teacherUnlockRequests, whatsappLink, type IncomingRequest } from "~/lib/money";
+import { incomingUnlockRequests, respondContactUnlock, whatsappLink, type IncomingRequest } from "~/lib/money";
 import { cn } from "~/lib/cn";
 import { Button } from "~/components/ui/button";
 import { Card, CardBody } from "~/components/ui/card";
@@ -13,16 +13,15 @@ import { statusTone } from "./my-unlocks";
 
 export const meta = () => [{ title: "Contact requests — TSC" }, { name: "robots", content: "noindex" }];
 
-const classLabel = (c: string | null) => (c ? c.replace(/^class_/, "Class ").replace(/^hsc_1$/, "HSC 1st yr").replace(/^hsc_2$/, "HSC 2nd yr") : null);
-
-export default function TeacherRequests() {
+/** Incoming contact requests — for teachers and students alike (whoever was asked). */
+export default function IncomingRequests() {
   const { t, locale } = useLocale();
   const x = t.unlock;
   const { me } = useRequireAuth();
   const [items, setItems] = useState<IncomingRequest[] | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  const load = useCallback(() => teacherUnlockRequests().then(setItems).catch(() => setItems([])), []);
+  const load = useCallback(() => incomingUnlockRequests().then(setItems).catch(() => setItems([])), []);
   useEffect(() => {
     if (me) load();
   }, [me, load]);
@@ -62,12 +61,12 @@ export default function TeacherRequests() {
               <CardBody className="grid gap-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="text-lg font-bold">{r.full_name?.trim() || r.tsc_id || "Student"}</p>
-                    <p className="text-sm text-muted">{[r.tsc_id, classLabel(r.current_class), r.subjects?.slice(0, 3).join(", ")].filter(Boolean).join(" · ")}</p>
-                    {(r.district || r.thana) && (
+                    <p className="text-lg font-bold">{r.person.full_name?.trim() || r.person.tsc_id}</p>
+                    <p className="text-sm text-muted">{[r.person.tsc_id, r.person.line, r.person.subjects?.slice(0, 3).join(", ")].filter(Boolean).join(" · ")}</p>
+                    {(r.person.district || r.person.thana) && (
                       <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
                         <MapPin className="size-4" aria-hidden />
-                        {[r.thana, r.district].filter(Boolean).join(", ")}
+                        {[r.person.thana, r.person.district].filter(Boolean).join(", ")}
                       </p>
                     )}
                   </div>
@@ -97,10 +96,7 @@ export default function TeacherRequests() {
 
                 {r.status === "accepted" && r.phone && (
                   <div className="flex flex-col gap-2 rounded-2xl bg-surface/70 p-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      {r.guardian_name && <p className="text-xs text-muted">{x.guardian}: {r.guardian_name}</p>}
-                      <span className="tabular text-xl font-bold">{r.phone}</span>
-                    </div>
+                    <span className="tabular text-xl font-bold">{r.phone}</span>
                     <div className="flex gap-2">
                       <Button asChild size="sm" variant="brand">
                         <a href={`tel:${r.phone}`}>

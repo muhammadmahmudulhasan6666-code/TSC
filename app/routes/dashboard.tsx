@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, CreditCard, Gift, Inbox, KeyRound, LogOut, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, CreditCard, Gift, Inbox, KeyRound, LogOut, Megaphone, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -148,15 +148,17 @@ export default function Dashboard() {
       )}
 
       {/* Shortcuts by role */}
-      <Stagger step={0.06} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <Stagger step={0.06} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          me.roles.includes("student") && { to: "/dashboard/unlocks", icon: KeyRound, label: t.unlock.myTitle, tint: "rose" as const },
-          me.roles.includes("teacher") && { to: "/dashboard/requests", icon: Inbox, label: t.unlock.requestsTitle, tint: "violet" as const },
+          !me.roles.includes("teacher") && { to: "/dashboard/posts", icon: Megaphone, label: t.posts.myPosts, tint: "mint" as const },
+          me.roles.includes("teacher") && { to: "/tuition-posts", icon: Megaphone, label: t.posts.boardTitle, tint: "mint" as const },
+          { to: "/dashboard/unlocks", icon: KeyRound, label: t.unlock.myTitle, tint: "rose" as const },
+          { to: "/dashboard/requests", icon: Inbox, label: t.unlock.requestsTitle, tint: "violet" as const },
           isAdmin && { to: "/admin/payments", icon: CreditCard, label: t.adminPay.title, tint: "gold" as const },
         ]
           .filter(Boolean)
           .map((l) => {
-            const { to, icon: Icon, label, tint } = l as { to: string; icon: typeof KeyRound; label: string; tint: "rose" | "violet" | "gold" };
+            const { to, icon: Icon, label, tint } = l as { to: string; icon: typeof KeyRound; label: string; tint: "rose" | "violet" | "gold" | "mint" };
             return (
               <Card key={to} tint={tint}>
                 <Link to={href(to)} className="group flex items-center gap-3 p-4">
